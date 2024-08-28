@@ -168,5 +168,6 @@ And thank you to everyone on [leanprover zulip chat](leanprover.zulipchat.com):
 
 Where I asked many questions about:
 
+  * [how to hack around the lack of coinduction](https://leanprover.zulipchat.com/#narrow/stream/270676-lean4/topic/how.20to.20hack.20around.20the.20lack.20of.20coinduction)
   * [Proof relevance](https://leanprover.zulipchat.com/#narrow/stream/270676-lean4/topic/Proof.20relevance)
   * [is there a refl for Type](https://leanprover.zulipchat.com/#narrow/stream/270676-lean4/topic/.E2.9C.94.20is.20there.20a.20refl.20for.20Type)
