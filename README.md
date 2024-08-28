@@ -66,7 +66,7 @@ We use namespaces as much as possible to make dependencies clear to the reader w
 
 ### Syntax
 
-We dropped most of the syntax, in favour of `([a-z]|[A-Z]|'|?|\.)*` names.
+We dropped most of the syntax, in favour of `([a-z]|[A-Z]|'|_|\.)*` names.
 
 | Description  | Original Agda | Translated Lean |
 | :---         | :---:         | :---:           |
@@ -82,14 +82,14 @@ We dropped most of the syntax, in favour of `([a-z]|[A-Z]|'|?|\.)*` names.
 | scalar       | `s · P`       | `scalar s P`    |
 |              | `P ⋆ Q`       | `concat P Q`    |
 | zero or more | `P ☆`        | `star P`        |
-| decidable bottom  | `⊥?`     | `Decidability.empty?` |
-| decidable top     | `⊤‽`     | `Decidability.unit?`  |
-| decidable sum     | `_⊎‽_`   | `Decidability.sum?`   |
-| decidable prod    | `_×‽_`   | `Decidability.prod?`   |
-| `Dec α -> Dec (List α)` | `_✶‽` | `Decidability.list?` |
+| decidable bottom  | `⊥?`     | `Decidability.empty` |
+| decidable top     | `⊤‽`     | `Decidability.unit`  |
+| decidable sum     | `_⊎‽_`   | `Decidability.sum`   |
+| decidable prod    | `_×‽_`   | `Decidability.prod`   |
+| `Dec α -> Dec (List α)` | `_✶‽` | `Decidability.list` |
 | `(β <=> α) -> Dec α -> Dec β` | `◃` | `Decidability.apply'` |
 | decidable equality   | `_≟_`  | `Decidability.decEq` |
-| decidable denotation | `⟦_⟧‽` | `denote? |
+| decidable denotation | `⟦_⟧‽` | `decDenote` |
 | denotation           | `⟦_⟧`  | `denote` |
 
 All language operators defined in `Language.lagda` are referenced in other modules as `◇.∅`, while in Lean they are references as qualified and non notational names `Language.emptyset`. The exception is `Calculus.lean`, where `Language.lean` is opened, so they are not qualified.

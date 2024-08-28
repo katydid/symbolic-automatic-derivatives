@@ -48,23 +48,23 @@ export Lang (emptyset universal emptystr char or and scalar concat star iso)
 def null (l: Lang R): Decidability.Dec (Calculus.null R) :=
   match l with
   -- ν ∅ = ⊥‽
-  | emptyset => Decidability.empty?
+  | emptyset => Decidability.empty
   -- ν 𝒰 = ⊤‽
-  | universal => Decidability.unit?
+  | universal => Decidability.unit
   -- ν 𝟏 = ν𝟏 ◃ ⊤‽
-  | emptystr => Decidability.apply' Calculus.null_emptystr Decidability.unit?
+  | emptystr => Decidability.apply' Calculus.null_emptystr Decidability.unit
   -- ν (p ∪ q) = ν p ⊎‽ ν q
-  | or p q => Decidability.sum? (null p) (null q)
+  | or p q => Decidability.sum (null p) (null q)
   -- ν (p ∩ q) = ν p ×‽ ν q
-  | and p q => Decidability.prod? (null p) (null q)
+  | and p q => Decidability.prod (null p) (null q)
   -- ν (s · p) = s ×‽ ν p
-  | scalar s p => Decidability.prod? s (null p)
+  | scalar s p => Decidability.prod s (null p)
   -- ν (p ⋆ q) = ν⋆ ◃ (ν p ×‽ ν q)
-  | concat p q => Decidability.apply' Calculus.null_concat (Decidability.prod? (null p) (null q))
+  | concat p q => Decidability.apply' Calculus.null_concat (Decidability.prod (null p) (null q))
   -- ν (p ☆) = ν☆ ◃ (ν p ✶‽)
-  | star p => Decidability.apply' Calculus.null_star (Decidability.list? (null p))
+  | star p => Decidability.apply' Calculus.null_star (Decidability.list (null p))
   -- ν (` a) = ν` ◃ ⊥‽
-  | char a => Decidability.apply' Calculus.null_char Decidability.empty?
+  | char a => Decidability.apply' Calculus.null_char Decidability.empty
   -- ν (f ◂ p) = f ◃ ν p
   | iso f p => Decidability.apply' f (null p)
 
@@ -97,7 +97,7 @@ def derive [Decidability.DecEq α] (l: Lang P) (a: α): Lang (Calculus.derive P 
   | star p =>
     (iso Calculus.derive_star
       (scalar
-        (Decidability.list? (null p))
+        (Decidability.list (null p))
         (concat (derive p a) (star p))
       )
     )
@@ -113,11 +113,11 @@ def derive [Decidability.DecEq α] (l: Lang P) (a: α): Lang (Calculus.derive P 
 -- ⟦_⟧‽ : Lang P → Decidable P
 -- ⟦ p ⟧‽     []    = ν p
 -- ⟦ p ⟧‽ (a  ∷ w)  = ⟦ δ p a ⟧‽ w
-def denote? [Decidability.DecEq α] (p: @Lang α P): Decidability.DecPred P :=
+def decDenote [Decidability.DecEq α] (p: @Lang α P): Decidability.DecPred P :=
   fun w =>
     match w with
     | [] => null p
-    | (a :: w) => denote? (derive p a) w
+    | (a :: w) => decDenote (derive p a) w
 
 -- ⟦_⟧ : Lang P → ◇.Lang
 -- ⟦_⟧ {P} r = P

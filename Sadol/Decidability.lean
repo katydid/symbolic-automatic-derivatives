@@ -38,7 +38,7 @@ abbrev DecRel {α : Type u} (r : α → α → Type u) :=
 
 -- ¬⇃_ : Set ℓ → Set ℓ
 -- ¬⇃ X = X → ⊥
-def not? (α: Type u): Type u :=
+def not (α: Type u): Type u :=
   α -> PEmpty.{u + 1}
 
 abbrev DecEq (α : Type u) :=
@@ -50,19 +50,19 @@ def decEq {α : Type u} [inst : DecEq α] (a b : α) : Dec (a ≡ b) :=
 
 -- ⊥? : Dec ⊥
 -- ⊥? = no(𝜆())
-def empty? : Dec PEmpty :=
+def empty : Dec PEmpty :=
   Dec.no (by intro; contradiction)
 
 -- ⊤‽  : Dec ⊤
 -- ⊤‽  = yes tt
-def unit? : Dec PUnit :=
+def unit : Dec PUnit :=
   Dec.yes PUnit.unit
 
 -- _⊎‽_  : Dec A → Dec B → Dec (A ⊎ B)
 -- no ¬a  ⊎‽ no ¬b  = no [ ¬a , ¬b ]
 -- yes a  ⊎‽ no ¬b  = yes (inj₁ a)
 -- _      ⊎‽ yes b  = yes (inj₂ b)
-def sum? {α β: Type u} (a: Dec α) (b: Dec β): Dec (α ⊕ β) :=
+def sum {α β: Type u} (a: Dec α) (b: Dec β): Dec (α ⊕ β) :=
   match (a, b) with
   | (Dec.no a, Dec.no b) =>
     Dec.no (fun ab =>
@@ -79,7 +79,7 @@ def sum? {α β: Type u} (a: Dec α) (b: Dec β): Dec (α ⊕ β) :=
 -- yes a  ×‽ yes b  = yes (a , b)
 -- no ¬a  ×‽ yes b  = no (¬a ∘ proj₁)
 -- _      ×‽ no ¬b  = no (¬b ∘ proj₂)
-def prod? {α β: Type u} (a: Dec α) (b: Dec β): Dec (α × β) :=
+def prod {α β: Type u} (a: Dec α) (b: Dec β): Dec (α × β) :=
   match (a, b) with
   | (Dec.yes a, Dec.yes b) => Dec.yes (Prod.mk a b)
   | (Dec.no a, Dec.yes _) => Dec.no (fun ⟨a', _⟩ => a a')
@@ -87,7 +87,7 @@ def prod? {α β: Type u} (a: Dec α) (b: Dec β): Dec (α × β) :=
 
 -- _✶‽ : Dec A → Dec (A ✶)
 -- _ ✶‽ = yes []
-def list? {α: Type u}: Dec α -> Dec (List α) :=
+def list {α: Type u}: Dec α -> Dec (List α) :=
   fun _ => Dec.yes []
 
 -- map′ : (A → B) → (B → A) → Dec A → Dec B
@@ -102,13 +102,13 @@ def map' {α β: Type u} (ab: α -> β) (ba: β -> α) (deca: Dec α): Dec β :=
 
 -- map‽⇔ : A ⇔ B → Dec A → Dec B
 -- map‽⇔ A⇔B = map′ (to ⟨$⟩_) (from ⟨$⟩_) where open Equivalence A⇔B
-def map? {α β: Type u} (ab: α <=> β) (deca: Dec α): Dec β :=
+def map {α β: Type u} (ab: α <=> β) (deca: Dec α): Dec β :=
   map' ab.toFun ab.invFun deca
 
 -- _▹_ : A ↔ B → Dec A → Dec B
 -- f ▹ a? = map‽⇔ (↔→⇔ f) a?
 def apply {α β: Type u} (f: α <=> β) (deca: Dec α): Dec β :=
-  map? f deca
+  map f deca
 
 -- TODO: rewrite Agda into Lean
 -- _▸_ : (P ⟷ Q) → Decidable P → Decidable Q
@@ -117,7 +117,7 @@ def apply {α β: Type u} (f: α <=> β) (deca: Dec α): Dec β :=
 -- _◃_ : B ↔ A → Dec A → Dec B
 -- g ◃ a? = ↔Eq.sym g ▹ a?
 def apply' {α β: Type u} (f: β <=> α) (deca: Dec α): Dec β :=
-  map? f.sym deca
+  map f.sym deca
 
 -- TODO: rewrite Agda into Lean
 -- _◂_ : Q ⟷ P → Decidable P → Decidable Q

@@ -46,7 +46,7 @@ def derive {α: Type u} {R: Language.Lang α} (l: Lang R) (a: α): Lang (Calculu
 unsafe -- we need unsafe, since Automatic.Lang requires unsafe
 def emptyset {α: Type u}: Lang (@Language.emptyset.{u} α) := Lang.mk
   -- ν ∅ = ⊥‽
-  (null := Decidability.empty?)
+  (null := Decidability.empty)
   -- δ ∅ a = ∅
   (derive := fun _ => emptyset)
 
@@ -54,7 +54,7 @@ def emptyset {α: Type u}: Lang (@Language.emptyset.{u} α) := Lang.mk
 unsafe -- we need unsafe, since Automatic.Lang requires unsafe
 def universal {α: Type u}: Lang (@Language.universal.{u} α) := Lang.mk
   -- ν 𝒰 = ⊤‽
-  (null := Decidability.unit?)
+  (null := Decidability.unit)
   -- δ 𝒰 a = 𝒰
   (derive := fun _ => universal)
 
@@ -62,7 +62,7 @@ def universal {α: Type u}: Lang (@Language.universal.{u} α) := Lang.mk
 unsafe -- we need unsafe, since Automatic.Lang requires unsafe
 def or {α: Type u} {P Q: Language.Lang α} (p: Lang P) (q: Lang Q): Lang (Language.or P Q) := Lang.mk
   -- ν (p ∪ q) = ν p ⊎‽ ν q
-  (null := Decidability.sum? (null p) (null q))
+  (null := Decidability.sum (null p) (null q))
   -- δ (p ∪ q) a = δ p a ∪ δ q a
   (derive := fun (a: α) => or (derive p a) (derive q a))
 
@@ -70,7 +70,7 @@ def or {α: Type u} {P Q: Language.Lang α} (p: Lang P) (q: Lang Q): Lang (Langu
 unsafe -- we need unsafe, since Automatic.Lang requires unsafe
 def and {α: Type u} {P Q: Language.Lang α} (p: Lang P) (q: Lang Q): Lang (Language.and P Q) := Lang.mk
   -- ν (p ∩ q) = ν p ×‽ ν q
-  (null := Decidability.prod? (null p) (null q))
+  (null := Decidability.prod (null p) (null q))
   -- δ (p ∩ q) a = δ p a ∩ δ q a
   (derive := fun (a: α) => and (derive p a) (derive q a))
 
@@ -78,7 +78,7 @@ def and {α: Type u} {P Q: Language.Lang α} (p: Lang P) (q: Lang Q): Lang (Lang
 unsafe -- we need unsafe, since Automatic.Lang requires unsafe
 def scalar {α: Type u} {P: Language.Lang α} (s: Decidability.Dec S) (p: Lang P): Lang (Language.scalar S P) := Lang.mk
   -- ν (s · p) = s ×‽ ν p
-  (null := Decidability.prod? s (null p))
+  (null := Decidability.prod s (null p))
   -- δ (s · p) a = s · δ p a
   (derive := fun (a: α) => scalar s (derive p a))
 
@@ -94,7 +94,7 @@ def iso {α: Type u} {P Q: Language.Lang α} (f: ∀ {w: List α}, Q w <=> P w) 
 unsafe -- we need unsafe, since Automatic.Lang requires unsafe
 def emptystr {α: Type u}: Lang (@Language.emptystr α) := Lang.mk
   -- ν 𝟏 = ν𝟏 ◃ ⊤‽
-  (null := Decidability.apply' Calculus.null_emptystr Decidability.unit?)
+  (null := Decidability.apply' Calculus.null_emptystr Decidability.unit)
   -- δ 𝟏 a = δ𝟏 ◂ ∅
   (derive := fun _ => iso Calculus.derive_emptystr emptyset)
 
@@ -102,7 +102,7 @@ def emptystr {α: Type u}: Lang (@Language.emptystr α) := Lang.mk
 unsafe -- we need unsafe, since Automatic.Lang requires unsafe
 def concat {α: Type u} {P Q: Language.Lang α} (p: Lang P) (q: Lang Q): Lang (Language.concat P Q) := Lang.mk
   -- ν (p ⋆ q) = ν⋆ ◃ (ν p ×‽ ν q)
-  (null := Decidability.apply' Calculus.null_concat (Decidability.prod? (null p) (null q)))
+  (null := Decidability.apply' Calculus.null_concat (Decidability.prod (null p) (null q)))
   -- δ (p ⋆ q) a = δ⋆ ◂ (ν p · δ q a ∪ δ p a ⋆ q)
   (derive := fun (a: α) =>
     (iso Calculus.derive_concat
@@ -119,12 +119,12 @@ def concat {α: Type u} {P Q: Language.Lang α} (p: Lang P) (q: Lang Q): Lang (L
 unsafe -- we need unsafe, since Automatic.Lang requires unsafe
 def star {α: Type u} {P: Language.Lang α} (p: Lang P): Lang (Language.star P) := Lang.mk
   -- ν (p ☆) = ν☆ ◃ (ν p ✶‽)
-  (null := Decidability.apply' Calculus.null_star (Decidability.list? (null p)))
+  (null := Decidability.apply' Calculus.null_star (Decidability.list (null p)))
   -- δ (p ☆) a = δ☆ ◂ (ν p ✶‽ · (δ p a ⋆ p ☆))
   (derive := fun (a: α) =>
     (iso Calculus.derive_star
       (scalar
-        (Decidability.list? (null p))
+        (Decidability.list (null p))
         (concat (derive p a) (star p))
       )
     )
@@ -134,7 +134,7 @@ def star {α: Type u} {P: Language.Lang α} (p: Lang P): Lang (Language.star P) 
 unsafe -- we need unsafe, since Automatic.Lang requires unsafe
 def char {α: Type u} [Decidability.DecEq α] (c: α): Lang (Language.char c) := Lang.mk
   -- ν (` a) = ν` ◃ ⊥‽
-  (null := Decidability.apply' Calculus.null_char Decidability.empty?)
+  (null := Decidability.apply' Calculus.null_char Decidability.empty)
   -- δ (` c) a = δ` ◂ ((a ≟ c) · 𝟏)
   (derive := fun (a: α) =>
     let cmp: Decidability.Dec (a ≡ c) := Decidability.decEq a c
@@ -147,11 +147,11 @@ def char {α: Type u} [Decidability.DecEq α] (c: α): Lang (Language.char c) :=
 -- ⟦ p ⟧‽     []    = ν p
 -- ⟦ p ⟧‽ (a  ∷ w)  = ⟦ δ p a ⟧‽ w
 unsafe -- we need unsafe, since Automatic.Lang requires unsafe
-def denote? (p: Lang P): Decidability.DecPred P :=
+def decDenote (p: Lang P): Decidability.DecPred P :=
   fun w =>
     match w with
     | [] => null p
-    | (a :: w) => denote? (derive p a) w
+    | (a :: w) => decDenote (derive p a) w
 
 -- ⟦_⟧ : Lang P → ◇.Lang
 -- ⟦_⟧ {P} _ = P
