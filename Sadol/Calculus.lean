@@ -1,8 +1,9 @@
 -- A complete translation to Lean from Agda of
 -- https://github.com/conal/paper-2021-language-derivatives/blob/main/Calculus.lagda
 -- except for the explicit TODOs found in this file.
--- and except functions that do not seem to be used: `ν∘foldlδ`, `νpureᵀ`, `νmapᵀ`, `νmapᵀ₂`, `ν✪` and `δ✪`.
 -- and except for `Experiment with alternative star` and everything below found in Calculus.lagda.
+-- and except functions that do not seem to be used: `ν∘foldlδ`, `νpureᵀ`, `νmapᵀ`, `νmapᵀ₂`, `ν✪` and `δ✪`.
+-- Note: `ν✪` and `δ✪` might be useful for the proofs of null_star and derive_star, not sure.
 
 import Sadol.Tipe
 import Sadol.Function
