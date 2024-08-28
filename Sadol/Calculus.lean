@@ -15,12 +15,12 @@ open List
 open Char
 open String
 
--- ν⇃ : Lang → Set ℓ      -- “nullable”
+-- ν⇃ : Lang → Set ℓ
 -- ν⇃ P = P []
 def null' (P: Lang α): Type u :=
   P []
 
--- δ⇃ : Lang → A → Lang   -- “derivative”
+-- δ⇃ : Lang → A → Lang
 -- δ⇃ P a w = P (a ∷ w)
 def derive' (P: Lang α) (a: α): Lang α :=
   fun (w: List α) => P (a :: w)
@@ -47,20 +47,39 @@ attribute [simp] null derive derives
 def derives_emptylist : derives f [] ≡ f :=
   trfl
 
--- TODO: Translate Agda into Lean
+-- _⊙_ : ∀ {A} → A ✶ → A ✶ → A ✶
+-- _⊙_ = _++_
 -- 𝒟⊙ : 𝒟 f (u ⊙ v) ≡ 𝒟 (𝒟 f u) v
 -- 𝒟⊙ {u = []} = refl
 -- 𝒟⊙ {f = f} {u = a ∷ u} = 𝒟⊙ {f = δ f a} {u = u}
+def derives_strings (f: List α -> β) (u v: List α): derives f (u ++ v) ≡ derives (derives f u) v :=
+  match u with
+  | [] => trfl
+  | (a :: u') => derives_strings (derive f a) u' v
 
--- TODO: Translate Agda into Lean
 -- ν∘𝒟 : ν ∘ 𝒟 f ≗ f
 -- ν∘𝒟 u rewrite (++-identityʳ u) = refl
 -- The paper says: "For functions f and g, f ≗ g is extensional equality, i.e., ∀ x → f x ≡ g x."
+def null_derives (f: List α -> β) (u: List α): (null ∘ derives f) u ≡ f u := by
+  simp
+  exact trfl
 
--- TODO: Translate Agda into Lean
 -- 𝒟foldl : 𝒟 f ≗ foldl δ f
 -- 𝒟foldl []        = refl
 -- 𝒟foldl (a ∷ as)  = 𝒟foldl as
+def derives_foldl (f: List α -> β) (u: List α): (derives f) u ≡ (List.foldl derive f) u :=
+  match u with
+  | [] => trfl
+  | (a :: as) => by sorry
+  -- TODO when trying to translate the Agda to Lean using:
+  -- | (a :: as) => derives_foldl f as
+  -- We get the following type error:
+  -- type mismatch
+  --   derives_foldl f as
+  -- has type
+  --   derives f as ≡ List.foldl derive f as : Type (max ?u.1250 ?u.1259)
+  -- but is expected to have type
+  --   derives f (a :: as) ≡ List.foldl derive f (a :: as) : Type (max ?u.1250 ?u.1259)
 
 -- ν∅  : ν ∅ ≡ ⊥
 -- ν∅ = refl
@@ -335,17 +354,36 @@ def derive_star {α: Type u} {a: α} {P: Lang α} {w: List α}:
     -- TODO
     sorry
 
--- TODO: Translate Agda into Lean
 -- 𝒟′ : (A ✶ → B) → A ✶ → B × (A ✶ → B)
 -- 𝒟′ f u = f u , 𝒟 f u
+def derives' {α: Type u} {β: Type v} (f: List α -> β) (u: List α): (β × (List α -> β)) :=
+  (f u, derives f u)
 
--- TODO: Translate Agda into Lean
 -- ʻ𝒟 : (A ✶ → B) → A ✶ → B × (A ✶ → B)
 -- ʻ𝒟 f u = let f″ = foldl δ f u in ν f″ , f″
+def derives'' {α: Type u} {β: Type v} (f: List α -> β) (u: List α): (β × (List α -> β)) :=
+  let f' := foldl derive f u
+  (null f', f')
 
--- TODO: Translate Agda into Lean
 -- 𝒟′≡ʻ𝒟 : 𝒟′ f ≗ ʻ𝒟 f
 -- 𝒟′≡ʻ𝒟     []     = refl
 -- 𝒟′≡ʻ𝒟 (a  ∷ as)  = 𝒟′≡ʻ𝒟 as
+-- The paper says: "For functions f and g, f ≗ g is extensional equality, i.e., ∀ x → f x ≡ g x."
+def derives'_is_derives'' {α: Type u} {β: Type v} (f: List α -> β):
+  (w: List α) -> (derives' f w) ≡ (derives'' f w) :=
+  fun w =>
+  match w with
+  | [] => trfl
+  | (a :: as) =>
+    by sorry
+  -- TODO when trying to translate the Agda to Lean using:
+  -- | (a :: as) => derives'_is_derives'' as
+  -- We get the following type error:
+  -- type mismatch
+  --   derives'_is_derives'' as
+  -- has type
+  --   derives' f as ≡ derives'' f as : Type (max v u)
+  -- but is expected to have type
+  --   derives' f (a :: as) ≡ derives'' f (a :: as) : Type (max v u)
 
 end Calculus

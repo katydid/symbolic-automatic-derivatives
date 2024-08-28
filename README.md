@@ -11,9 +11,9 @@ The goals of this project are to:
 ## Links
 
   * The original paper: [Symbolic and Automatic Differentiation of Languages - Conal Elliott](http://conal.net/papers/language-derivatives)
-  * If you are interested in [collaborating with Conal Elliott](https://github.com/conal/Collaboration)
+  * If you are new to derivatives, here is [an introduction to Brzozowski's derivatives](https://medium.com/better-programming/how-to-take-the-derivative-of-a-regular-expression-explained-2e7cea15028d)
   * Want to read the Agda code with the ability to "Go to Definition", but you do not want to install Agda. Then download the zip file in this gist: [Generated HTML from the original Agda code](https://gist.github.com/awalterschulze/aecd70ccb5448f17992913ccde359a2e).
-  * We [streamed](https://www.twitch.tv/awalterschulze) the development the foundations of this repo. You can find the recordings in this [Youtube Playlist](https://www.youtube.com/watch?v=OoKNpfUNpfU&list=PLYwF9EIrl42Qr52nnmeuSXp47S79sB3W0).
+  * We [streamed](https://www.twitch.tv/awalterschulze) the development the foundations of this repo. You can find the recordings of your struggles on this [Youtube Playlist](https://www.youtube.com/watch?v=OoKNpfUNpfU&list=PLYwF9EIrl42Qr52nnmeuSXp47S79sB3W0).
 
 ## Requirements
 
@@ -100,7 +100,7 @@ We use explicit parameters and almost no module level parameters, for example `L
 
 ## Thank you
 
-Thank you to the [Conal Elliot](http://conal.net/) for the idea of comparing LeanProver to Agda using the paper [Symbolic and Automatic Differentiation of Languages - Conal Elliott](http://conal.net/papers/language-derivatives).
+Thank you to the [Conal Elliot](http://conal.net/) for the idea of comparing LeanProver to Agda using the paper [Symbolic and Automatic Differentiation of Languages - Conal Elliott](http://conal.net/papers/language-derivatives). If you are interested in collaborating with Conal Elliott, see this [Collaboration](https://github.com/conal/Collaboration) page.
 
 Thank you to the Authors and Advisors:
 
