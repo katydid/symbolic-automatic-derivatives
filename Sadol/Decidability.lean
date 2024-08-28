@@ -1,5 +1,6 @@
--- A translation to Lean from Agda
+-- A complete translation to Lean from Agda of
 -- https://github.com/conal/paper-2021-language-derivatives/blob/main/Decidability.lagda
+-- except for explicit TODOs
 
 import Sadol.Function
 
@@ -22,9 +23,23 @@ class inductive Dec (P: Type u): Type u where
 --   Decidable P = ∀ x → Dec (P x)
 -- Lean Prop:
 --   abbrev DecidablePred {α : Sort u} (r : α → Prop) :=
---   (a : α) → Decidable (r a)
+--     (a : α) → Decidable (r a)
 abbrev DecPred {α : Type u} (P : α → Type u) :=
   (a : α) → Dec (P a)
+
+-- Agda
+--   Decidable₂ : (A → B → Set ℓ) → Set ℓ
+--   Decidable₂ _∼_ = ∀ a b → Dec (a ∼ b)
+-- Lean Prop:
+--   abbrev DecidableRel {α : Sort u} (r : α → α → Prop) :=
+--     (a b : α) → Decidable (r a b)
+abbrev DecRel {α : Type u} (r : α → α → Type u) :=
+  (a b : α) → Dec (r a b)
+
+-- ¬⇃_ : Set ℓ → Set ℓ
+-- ¬⇃ X = X → ⊥
+def not? (α: Type u): Type u :=
+  α -> PEmpty.{u + 1}
 
 abbrev DecEq (α : Type u) :=
   (a b : α) → Dec (a ≡ b)
@@ -78,7 +93,7 @@ def list? {α: Type u}: Dec α -> Dec (List α) :=
 -- map′ : (A → B) → (B → A) → Dec A → Dec B
 -- map′ A→B B→A (yes a) = yes (A→B a)
 -- map′ A→B B→A (no ¬a) = no (¬a ∘ B→A)
-private def map' {α β: Type u} (ab: α -> β) (ba: β -> α) (deca: Dec α): Dec β :=
+def map' {α β: Type u} (ab: α -> β) (ba: β -> α) (deca: Dec α): Dec β :=
   match deca with
   | Dec.yes a =>
     Dec.yes (ab a)
@@ -87,7 +102,7 @@ private def map' {α β: Type u} (ab: α -> β) (ba: β -> α) (deca: Dec α): D
 
 -- map‽⇔ : A ⇔ B → Dec A → Dec B
 -- map‽⇔ A⇔B = map′ (to ⟨$⟩_) (from ⟨$⟩_) where open Equivalence A⇔B
-private def map? {α β: Type u} (ab: α <=> β) (deca: Dec α): Dec β :=
+def map? {α β: Type u} (ab: α <=> β) (deca: Dec α): Dec β :=
   map' ab.toFun ab.invFun deca
 
 -- _▹_ : A ↔ B → Dec A → Dec B
@@ -95,9 +110,17 @@ private def map? {α β: Type u} (ab: α <=> β) (deca: Dec α): Dec β :=
 def apply {α β: Type u} (f: α <=> β) (deca: Dec α): Dec β :=
   map? f deca
 
+-- TODO: rewrite Agda into Lean
+-- _▸_ : (P ⟷ Q) → Decidable P → Decidable Q
+-- (f ▸ p?) w = f ▹ p? w
+
 -- _◃_ : B ↔ A → Dec A → Dec B
 -- g ◃ a? = ↔Eq.sym g ▹ a?
 def apply' {α β: Type u} (f: β <=> α) (deca: Dec α): Dec β :=
   map? f.sym deca
+
+-- TODO: rewrite Agda into Lean
+-- _◂_ : Q ⟷ P → Decidable P → Decidable Q
+-- (g ◂ p?) w = g ◃ p? w
 
 end Decidability

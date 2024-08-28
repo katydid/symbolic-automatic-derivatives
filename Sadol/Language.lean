@@ -1,4 +1,4 @@
--- A translation to Lean from Agda
+-- A translation to Lean from Agda of
 -- https://github.com/conal/paper-2021-language-derivatives/blob/main/Language.lagda
 
 import Sadol.Tipe
