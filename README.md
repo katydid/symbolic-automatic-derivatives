@@ -109,3 +109,27 @@ Thank you to the Authors and Advisors:
   * [Gregor Feierabend](https://www.linkedin.com/in/gregorfeierabend/)
   * [Keegan Perry](https://github.com/keeganperry7)
   * [Brink van der Merwe](https://abvdm.pages.cs.sun.ac.za/)
+
+And thank you to everyone on [leanprover zulip chat](leanprover.zulipchat.com):
+
+  * [Adam Topaz](https://github.com/adamtopaz)
+  * [Andrew Carter](mailto:acarter@cs.hmc.edu)
+  * [Arthur Adjedj](https://github.com/arthur-adjedj)
+  * [Damiano Testa](https://github.com/adomani)
+  * [David Thrane Christiansen](https://davidchristiansen.dk/)
+  * [Eric Wieser](https://github.com/eric-wieser)
+  * [Eric Rodriguez](https://github.com/ericrbg)
+  * [François G. Dorais](https://github.com/fgdorais)
+  * [Kim Morrison](https://github.com/semorrison)
+  * [Kyle Miller](https://github.com/kmill)
+  * [Mario Carneiro](https://github.com/digama0)
+  * [Jannis Limperg](https://github.com/JLimperg)
+  * [Junyan Xu](https://github.com/alreadydone)
+  * [Sebastian Ullrich](https://github.com/Kha)
+  * [Shreyas Srinivas](mailto:s.s.shreyas@outlook.com)
+  * [Siegmentation Fault](https://github.com/forked-from-1kasper)
+
+Where I asked many questions about:
+
+  * [Proof relevance](https://leanprover.zulipchat.com/#narrow/stream/270676-lean4/topic/Proof.20relevance)
+  * [is there a refl for Type](https://leanprover.zulipchat.com/#narrow/stream/270676-lean4/topic/.E2.9C.94.20is.20there.20a.20refl.20for.20Type)
