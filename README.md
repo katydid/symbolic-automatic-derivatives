@@ -61,7 +61,8 @@ We use namespaces as much as possible to make dependencies clear to the reader w
 | `List α -> Type u` | `◇.Lang`      | `Language.Lang`   |
 | `List α -> β`      | `◇.ν`         | `Calculus.null`   |
 | `(List α -> β) -> (a: α) -> (List α -> β)` | `◇.δ`     | `Calculus.derive` |
-|                    | `Dec` | `Decidability.Dec` |
+|                    | `Dec`         | `Decidability.Dec`     |
+|                    | `Decidable`   | `Decidability.DecPred` |
 
 ### Syntax
 
@@ -87,7 +88,9 @@ We dropped most of the syntax, in favour of `([a-z]|[A-Z]|'|?|\.)*` names.
 | decidable prod    | `_×‽_`   | `Decidability.prod?`   |
 | `Dec α -> Dec (List α)` | `_✶‽` | `Decidability.list?` |
 | `(β <=> α) -> Dec α -> Dec β` | `◃` | `Decidability.apply'` |
-| decidable equality | `_≟_`   | `Decidability.decEq`
+| decidable equality   | `_≟_`  | `Decidability.decEq` |
+| decidable denotation | `⟦_⟧‽` | `denote? |
+| denotation           | `⟦_⟧`  | `denote` |
 
 All language operators defined in `Language.lagda` are referenced in other modules as `◇.∅`, while in Lean they are references as qualified and non notational names `Language.emptyset`. The exception is `Calculus.lean`, where `Language.lean` is opened, so they are not qualified.
 

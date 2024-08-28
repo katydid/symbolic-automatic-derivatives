@@ -17,6 +17,15 @@ class inductive Dec (P: Type u): Type u where
   | yes: P -> Dec P
   | no: (P -> PEmpty.{u + 1}) -> Dec P
 
+-- Agda:
+--   Decidable : (X → Set ℓ) → Set ℓ
+--   Decidable P = ∀ x → Dec (P x)
+-- Lean Prop:
+--   abbrev DecidablePred {α : Sort u} (r : α → Prop) :=
+--   (a : α) → Decidable (r a)
+abbrev DecPred {α : Type u} (P : α → Type u) :=
+  (a : α) → Dec (P a)
+
 abbrev DecEq (α : Type u) :=
   (a b : α) → Dec (a ≡ b)
 

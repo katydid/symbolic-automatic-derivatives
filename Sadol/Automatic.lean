@@ -1,4 +1,4 @@
--- A translation to Lean from Agda
+-- A complete translation to Lean from Agda of
 -- https://github.com/conal/paper-2021-language-derivatives/blob/main/Automatic.lagda
 
 -- The idea is that Automatic.lean and Symoblic.lean are duals of each other.
@@ -142,5 +142,20 @@ def char {α: Type u} [Decidability.DecEq α] (c: α): Lang (Language.char c) :=
       (scalar cmp emptystr)
     )
   )
+
+-- ⟦_⟧‽ : Lang P → Decidable P
+-- ⟦ p ⟧‽     []    = ν p
+-- ⟦ p ⟧‽ (a  ∷ w)  = ⟦ δ p a ⟧‽ w
+unsafe -- we need unsafe, since Automatic.Lang requires unsafe
+def denote? (p: Lang P): Decidability.DecPred P :=
+  fun w =>
+    match w with
+    | [] => null p
+    | (a :: w) => denote? (derive p a) w
+
+-- ⟦_⟧ : Lang P → ◇.Lang
+-- ⟦_⟧ {P} _ = P
+unsafe -- we need unsafe, since Automatic.Lang requires unsafe
+def denote (_: @Lang α P): Language.Lang α := P
 
 end Automatic

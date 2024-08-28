@@ -1,4 +1,4 @@
--- A translation to Lean from Agda
+-- A complete translation to Lean from Agda of
 -- https://github.com/conal/paper-2021-language-derivatives/blob/main/Symbolic.lagda
 
 -- The idea is that Symoblic.lean and Automatic.lean are duals of each other.
@@ -109,5 +109,18 @@ def derive [Decidability.DecEq α] (l: Lang P) (a: α): Lang (Calculus.derive P 
     )
   -- δ (f ◂ p) a = f ◂ δ p a
   | iso f p => iso f (derive p a)
+
+-- ⟦_⟧‽ : Lang P → Decidable P
+-- ⟦ p ⟧‽     []    = ν p
+-- ⟦ p ⟧‽ (a  ∷ w)  = ⟦ δ p a ⟧‽ w
+def denote? [Decidability.DecEq α] (p: @Lang α P): Decidability.DecPred P :=
+  fun w =>
+    match w with
+    | [] => null p
+    | (a :: w) => denote? (derive p a) w
+
+-- ⟦_⟧ : Lang P → ◇.Lang
+-- ⟦_⟧ {P} r = P
+def denote (_: @Lang α P): Language.Lang α := P
 
 end Symbolic
