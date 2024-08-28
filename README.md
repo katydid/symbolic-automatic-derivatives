@@ -146,6 +146,7 @@ Thank you to the Authors and Advisors:
   * [Gregor Feierabend](https://www.linkedin.com/in/gregorfeierabend/)
   * [Keegan Perry](https://github.com/keeganperry7)
   * [Brink van der Merwe](https://abvdm.pages.cs.sun.ac.za/)
+  * [Stefano Paluello](https://www.linkedin.com/in/stefanopaluello/)
 
 And thank you to everyone on [leanprover zulip chat](leanprover.zulipchat.com):
 
