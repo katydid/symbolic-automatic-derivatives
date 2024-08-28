@@ -1,6 +1,6 @@
 -- A complete translation to Lean from Agda of
 -- https://github.com/conal/paper-2021-language-derivatives/blob/main/Decidability.lagda
--- except for explicit TODOs
+-- except for the explicit TODOs found in this file.
 
 import Sadol.Function
 

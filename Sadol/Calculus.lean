@@ -1,5 +1,8 @@
--- A translation to Lean from Agda
+-- A complete translation to Lean from Agda of
 -- https://github.com/conal/paper-2021-language-derivatives/blob/main/Calculus.lagda
+-- except for the explicit TODOs found in this file.
+-- and except functions that do not seem to be used: `ν∘foldlδ`, `νpureᵀ`, `νmapᵀ`, `νmapᵀ₂`, `ν✪` and `δ✪`.
+-- and except for `Experiment with alternative star` and everything below found in Calculus.lagda.
 
 import Sadol.Tipe
 import Sadol.Function
@@ -11,6 +14,16 @@ open Language
 open List
 open Char
 open String
+
+-- ν⇃ : Lang → Set ℓ      -- “nullable”
+-- ν⇃ P = P []
+def null' (P: Lang α): Type u :=
+  P []
+
+-- δ⇃ : Lang → A → Lang   -- “derivative”
+-- δ⇃ P a w = P (a ∷ w)
+def derive' (P: Lang α) (a: α): Lang α :=
+  fun (w: List α) => P (a :: w)
 
 -- ν : (A ✶ → B) → B
 -- ν f = f []
@@ -28,6 +41,26 @@ def derive {α: Type u} {β: Type v} (f: List α -> β) (a: α): (List α -> β)
   derives f [a]
 
 attribute [simp] null derive derives
+
+-- 𝒟[] : 𝒟 f [] ≡ f
+-- 𝒟[] = refl
+def derives_emptylist : derives f [] ≡ f :=
+  trfl
+
+-- TODO: Translate Agda into Lean
+-- 𝒟⊙ : 𝒟 f (u ⊙ v) ≡ 𝒟 (𝒟 f u) v
+-- 𝒟⊙ {u = []} = refl
+-- 𝒟⊙ {f = f} {u = a ∷ u} = 𝒟⊙ {f = δ f a} {u = u}
+
+-- TODO: Translate Agda into Lean
+-- ν∘𝒟 : ν ∘ 𝒟 f ≗ f
+-- ν∘𝒟 u rewrite (++-identityʳ u) = refl
+-- The paper says: "For functions f and g, f ≗ g is extensional equality, i.e., ∀ x → f x ≡ g x."
+
+-- TODO: Translate Agda into Lean
+-- 𝒟foldl : 𝒟 f ≗ foldl δ f
+-- 𝒟foldl []        = refl
+-- 𝒟foldl (a ∷ as)  = 𝒟foldl as
 
 -- ν∅  : ν ∅ ≡ ⊥
 -- ν∅ = refl
@@ -301,5 +334,18 @@ def derive_star {α: Type u} {a: α} {P: Lang α} {w: List α}:
   case rightInv =>
     -- TODO
     sorry
+
+-- TODO: Translate Agda into Lean
+-- 𝒟′ : (A ✶ → B) → A ✶ → B × (A ✶ → B)
+-- 𝒟′ f u = f u , 𝒟 f u
+
+-- TODO: Translate Agda into Lean
+-- ʻ𝒟 : (A ✶ → B) → A ✶ → B × (A ✶ → B)
+-- ʻ𝒟 f u = let f″ = foldl δ f u in ν f″ , f″
+
+-- TODO: Translate Agda into Lean
+-- 𝒟′≡ʻ𝒟 : 𝒟′ f ≗ ʻ𝒟 f
+-- 𝒟′≡ʻ𝒟     []     = refl
+-- 𝒟′≡ʻ𝒟 (a  ∷ as)  = 𝒟′≡ʻ𝒟 as
 
 end Calculus

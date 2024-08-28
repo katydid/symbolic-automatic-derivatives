@@ -1,6 +1,6 @@
 -- A complete translation to Lean from Agda of
 -- https://github.com/conal/paper-2021-language-derivatives/blob/main/Language.lagda
--- We skipped translation of `module AltStar where` and below.
+-- except for `module AltStar where` and everything below found in Language.lagda.
 
 import Sadol.Tipe
 
