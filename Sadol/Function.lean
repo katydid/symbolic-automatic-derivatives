@@ -1,6 +1,6 @@
 -- An approximation of the Function module in the Agda standard library.
 
-import Katydid.Conal.Tipe
+import Sadol.Tipe
 
 -- A ↔ B = Inverse A B
 

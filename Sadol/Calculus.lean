@@ -1,9 +1,9 @@
 -- A translation to Lean from Agda
 -- https://github.com/conal/paper-2021-language-derivatives/blob/main/Calculus.lagda
 
-import Katydid.Conal.Tipe
-import Katydid.Conal.Function
-import Katydid.Conal.Language
+import Sadol.Tipe
+import Sadol.Function
+import Sadol.Language
 
 namespace Calculus
 
