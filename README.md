@@ -36,9 +36,9 @@ We needed to redefine the following types and functions to use `Type` instead of
 
 | Description  | Prop  | Type  |
 | :---         | :---: | :---: |
-| equality     | `=`   | `≡` in [Tipe.lean](./Tipe.lean)  |
-| equivalance  | `Mathlib.Logic.Equiv.Defs.Equiv`  | `TEquiv` or `<=>` in [Function.lean](./Function.lean) |
-| decidability | `Decidable`  | `Decidability.Dec` in [Decidability.lean](./Decidability.lean) |
+| equality     | `=`   | `≡` in [Tipe.lean](./Sadol/Tipe.lean)  |
+| equivalance  | `Mathlib.Logic.Equiv.Defs.Equiv`  | `TEquiv` or `<=>` in [Function.lean](./Sadol/Function.lean) |
+| decidability | `Decidable`  | `Decidability.Dec` in [Decidability.lean](./Sadol/Decidability.lean) |
 
 ### Simply renamings
 
