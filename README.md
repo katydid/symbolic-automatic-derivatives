@@ -15,6 +15,9 @@ The goals of this project are to:
   * Want to read the Agda code with the ability to "Go to Definition", but you do not want to install Agda. Then download the zip file in this gist: [Generated HTML from the original Agda code](https://gist.github.com/awalterschulze/aecd70ccb5448f17992913ccde359a2e).
   * We [streamed](https://www.twitch.tv/awalterschulze) the development the foundations of this repo. You can find the recordings in this [Youtube Playlist](https://www.youtube.com/watch?v=OoKNpfUNpfU&list=PLYwF9EIrl42Qr52nnmeuSXp47S79sB3W0).
 
+## Requirements
+
+This project requires setting up lean, see the [official documentation](https://lean-lang.org/lean4/doc/quickstart.html).
 
 ## Differences from the Agda implementation
 
