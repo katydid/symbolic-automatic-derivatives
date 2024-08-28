@@ -1,7 +1,7 @@
 -- A translation to Lean from Agda
 -- https://github.com/conal/paper-2021-language-derivatives/blob/main/Decidability.lagda
 
-import Katydid.Conal.Function
+import Sadol.Function
 
 namespace Decidability
 

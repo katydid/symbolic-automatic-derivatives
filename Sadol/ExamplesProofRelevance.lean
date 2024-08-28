@@ -1,7 +1,7 @@
 -- Here we show how proofs are inspectable, since we have proof relevant proofs.
 -- Each proof represents a different parse and not just a validation.
 
-import Katydid.Conal.Language
+import Sadol.Language
 
 open Language
 open String

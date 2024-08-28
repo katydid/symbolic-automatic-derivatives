@@ -1,7 +1,7 @@
 -- A translation to Lean from Agda
 -- https://github.com/conal/paper-2021-language-derivatives/blob/main/Examples.lagda
 
-import Katydid.Conal.Language
+import Sadol.Language
 open Language
 
 example: (char 'a') ['a'] := by

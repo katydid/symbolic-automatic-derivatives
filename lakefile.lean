@@ -1,7 +1,7 @@
 import Lake
 open Lake DSL
 
-package katydid
+package sadol
 
 @[default_target]
-lean_lib Katydid
+lean_lib Sadol

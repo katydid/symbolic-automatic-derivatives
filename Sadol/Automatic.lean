@@ -10,10 +10,10 @@
 -- Automatic.lean gives the flexibility to the user of the library to add their own operators.
 -- It is almost like each operator is a type class, that needs to implement the derive and null functions.
 
-import Katydid.Conal.Decidability
-import Katydid.Conal.Function
-import Katydid.Conal.Language
-import Katydid.Conal.Calculus
+import Sadol.Decidability
+import Sadol.Function
+import Sadol.Language
+import Sadol.Calculus
 
 namespace Automatic
 

@@ -10,10 +10,10 @@
 -- Whereas Automatic.lean is defined row based and needs to define both functions for each single operator to complete a definition, so we have a definition per operator.
 -- Symbolic.lean has definitions of null and derive that we are familiar with, but it doesn't allow the user of the library the flexibility to add their own operators.
 
-import Katydid.Conal.Decidability
-import Katydid.Conal.Function
-import Katydid.Conal.Language
-import Katydid.Conal.Calculus
+import Sadol.Decidability
+import Sadol.Function
+import Sadol.Language
+import Sadol.Calculus
 
 namespace Symbolic
 
