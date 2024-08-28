@@ -1,19 +1,22 @@
 # ReProving Agda in Lean
 
-In this subproject we are working on translating the paper [Symbolic and Automatic Differentiation of Languages - Conal Elliott](http://conal.net/papers/language-derivatives) from Agda to LeanProver.
+This project translates the paper ([Symbolic and Automatic Differentiation of Languages - Conal Elliott](http://conal.net/papers/language-derivatives)) from Agda to LeanProver.
 
 The goals of this project are to:
 
-  - Discover the differences between Agda and Lean
+  - Discover the differences between Agda and Lean4.
   - Define proofs on `Type` instead of `Prop`, since each proof represents a different parse of the language.
   - Avoid tactics if possible, in favour of simple `trfl` (our version of `rfl`).
 
 ## Links
 
-  - [Symbolic and Automatic Differentiation of Languages - Conal Elliott](http://conal.net/papers/language-derivatives)
-  - [Collaboration with Conal Elliott](https://github.com/conal/Collaboration)
+  * The original paper: [Symbolic and Automatic Differentiation of Languages - Conal Elliott](http://conal.net/papers/language-derivatives)
+  * If you are interested in [collaborating with Conal Elliott](https://github.com/conal/Collaboration)
+  * Want to read the Agda code with the ability to "Go to Definition", but you do not want to install Agda. Then download the zip file in this gist: [Generated HTML from the original Agda code](https://gist.github.com/awalterschulze/aecd70ccb5448f17992913ccde359a2e).
+  * We [streamed](https://www.twitch.tv/awalterschulze) the development the foundations of this repo. You can find the recordings in this [Youtube Playlist](https://www.youtube.com/watch?v=OoKNpfUNpfU&list=PLYwF9EIrl42Qr52nnmeuSXp47S79sB3W0).
 
-## Differences with Agda implementation
+
+## Differences from the Agda implementation
 
 ### Equality `≡`
 
@@ -88,3 +91,15 @@ All language operators defined in `Language.lagda` are referenced in other modul
 ### Explicit parameters.
 
 We use explicit parameters and almost no module level parameters, for example `Lang` in Agda is defined as `Lang α` in Lean. In Agda the `A` parameter for `Lang` is lifted to the module level, but in this translation we make it explicit.
+
+## Thank you
+
+Thank you to the [Conal Elliot](http://conal.net/) for the idea of comparing LeanProver to Agda using the paper [Symbolic and Automatic Differentiation of Languages - Conal Elliott](http://conal.net/papers/language-derivatives).
+
+Thank you to the Authors and Advisors:
+
+  * [Paul Cadman](https://www.linkedin.com/in/paul-cadman/)
+  * [Jan Mas Rovira](https://janmasrovira.gitlab.io/ascetic-slug/)
+  * [Gregor Feierabend](https://www.linkedin.com/in/gregorfeierabend/)
+  * [Keegan Perry](https://github.com/keeganperry7)
+  * [Brink van der Merwe](https://abvdm.pages.cs.sun.ac.za/)
