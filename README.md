@@ -19,13 +19,13 @@ The goals of this project are to:
 
 This project requires setting up lean, see the [official documentation](https://lean-lang.org/lean4/doc/quickstart.html).
 
-## Differences from the Agda implementation
+## Trivial differences from the Agda implementation
 
 ### Equality `≡`
 
 Lean has `Prop` and `Type` and Agda has `Set`, which we can think of as `Type` in Lean. We want out proofs to be proof revelant, since each proof represents a different parse of our language. This means the theorems have to be defined on `Type`. For example we have equality redefined in terms of `Type` as `TEq` (using the syntax `≡`) and  we replace `rfl` with `trfl`, but we do not a replacement tactic for `rfl`.
 
-```
+```lean
 inductive TEq.{tu} {α: Type tu} (a b: α) : Type tu where
   | mk : a = b -> TEq a b
 
@@ -97,6 +97,43 @@ All language operators defined in `Language.lagda` are referenced in other modul
 ### Explicit parameters.
 
 We use explicit parameters and almost no module level parameters, for example `Lang` in Agda is defined as `Lang α` in Lean. In Agda the `A` parameter for `Lang` is lifted to the module level, but in this translation we make it explicit.
+
+## The Non-Trivial difference from the Agda implementation
+
+[Automatic.lean](./Sodal/Automatic.lean) requires the use of `unsafe` to define `Automatic.Lang`:
+
+```lean
+unsafe
+inductive Lang {α: Type u} (R: Language.Lang α): Type (u) where
+  | mk
+   (null: Decidability.Dec (Calculus.null R))
+   (derive: (a: α) -> Lang (Calculus.derive R a))
+   : Lang R
+```
+
+Without `unsafe`, we get the following error: `"(kernel) arg #4 of 'Automatic.Lang.mk' contains a non valid occurrence of the datatypes being declared"`
+
+This was probably inevitable, given that the Agda version of Lang in [Automatic.lagda](https://github.com/conal/paper-2021-language-derivatives/blob/main/Automatic.lagda#L40-L44) required coinduction, which is not a feature of Lean:
+
+```agda
+record Lang (P : ◇.Lang) : Set (suc ℓ) where
+  coinductive
+  field
+    ν : Dec (◇.ν P)
+    δ : (a : A) → Lang (◇.δ P a)
+```
+
+Also this representation encountered issues with Agda's termination checker, when defining the derivative of the concat operator, which was fixed using a sized version of the record:
+
+```agda
+record Lang i (P : ◇.Lang) : Set (suc ℓ) where
+  coinductive
+  field
+    ν : Dec (◇.ν P)
+    δ : ∀ {j : Size< i} → (a : A) → Lang j (◇.δ P a)
+```
+
+We hope to find help to remove the use of `unsafe` in Lean.
 
 ## Thank you
 
