@@ -98,6 +98,12 @@ All language operators defined in `Language.lagda` are referenced in other modul
 
 We use explicit parameters and almost no module level parameters, for example `Lang` in Agda is defined as `Lang α` in Lean. In Agda the `A` parameter for `Lang` is lifted to the module level, but in this translation we make it explicit.
 
+### Reordering of definitions
+
+In Lean definitions need to be in the order they are used. So for example, in `Automatic.lean` `iso` needs to be defined before `concat`, since concat uses `iso`, but in `Automatic.lagda`, this can be defined in any order.
+
+Also each function signature and its implementatio is grouped together in Lean, while in the Agda implementation the function type signatures are grouped together and the implementations of those functions are much lower down in the file.
+
 ## The Non-Trivial difference from the Agda implementation
 
 [Automatic.lean](./Sodal/Automatic.lean) has a lot of termination checking issues.
