@@ -146,15 +146,15 @@ def null_concat {α: Type u} {P Q: Lang α}:
     simp at hxy
     simp [hxy] at hx hy
     exact ⟨hx, hy⟩
-  case invFun =>
-    intro ⟨x, y⟩
-    exact ⟨[], [], x, y, by simp⟩
+  case invFun => exact fun ⟨x, y⟩ => ⟨[], [], x, y, rfl⟩
   case leftInv =>
-    -- TODO
-    sorry
-  case rightInv =>
-    intro
-    exact trfl
+    intro ⟨x, y, hx, hy, hxy⟩
+    simp at hxy
+    cases hxy.left with
+    | refl =>
+      cases hxy.right with
+        | refl => exact trfl
+  case rightInv => exact fun _ => trfl
 
 -- ν✪  : ν (P ✪) ↔ (ν P) ✶
 -- ν✪ {P = P} = mk↔′ k k⁻¹ invˡ invʳ
