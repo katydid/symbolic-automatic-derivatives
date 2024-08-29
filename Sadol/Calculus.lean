@@ -188,22 +188,9 @@ def null_star {α: Type u} {P: Lang α}:
   null (star P) <=> List (null P) := by
   refine TEquiv.mk ?toFun ?invFun ?leftInv ?rightInv
   case toFun =>
-    intro ⟨ N1, N2, N3 ⟩
-    cases N2 with
-    | nil =>
-      simp
-      constructor
-    | cons px pxs =>
-      rename_i xs
-      rename_i x
-      simp at N3
-      cases N3 with
-      | intro left right =>
-        simp
-        constructor
+    exact fun _ => List.nil
   case invFun =>
-    -- TODO: The proof is complicated enough in Agda to warrant the liberal use of tactics in Lean
-    sorry
+    exact fun _ => ⟨ [], All.nil, rfl ⟩
   case leftInv =>
     -- TODO: The proof is complicated enough in Agda to warrant the liberal use of tactics in Lean
     sorry
