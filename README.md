@@ -100,18 +100,51 @@ We use explicit parameters and almost no module level parameters, for example `L
 
 ## The Non-Trivial difference from the Agda implementation
 
-[Automatic.lean](./Sodal/Automatic.lean) requires the use of `unsafe` to define `Automatic.Lang`:
+[Automatic.lean](./Sodal/Automatic.lean) has a lot of termination checking issues.
+We can safely define Automatic.Lang:
 
 ```lean
-unsafe
-inductive Lang {α: Type u} (R: Language.Lang α): Type (u) where
+inductive Lang {α: Type u} : Language.Lang α -> Type (u+1) where
   | mk
-   (null: Decidability.Dec (Calculus.null R))
-   (derive: (a: α) -> Lang (Calculus.derive R a))
-   : Lang R
+    (null: Decidability.Dec (Calculus.null R))
+    (derive: (a: α) -> Lang (Calculus.derive R a))
+    : Lang R
 ```
 
-Without `unsafe`, we get the following error: `"(kernel) arg #4 of 'Automatic.Lang.mk' contains a non valid occurrence of the datatypes being declared"`
+But when we try to instantiate it using any operator, we get termination checking issues, for example given `emptyset`:
+```
+-- ∅ : Lang ◇.∅
+def emptyset {α: Type u}: Lang (@Language.emptyset.{u} α) := Lang.mk
+  -- ν ∅ = ⊥‽
+  (null := Decidability.empty)
+  -- δ ∅ a = ∅
+  (derive := fun _ => emptyset)
+```
+
+We get the following error:
+```
+fail to show termination for
+  Automatic.emptyset
+with errors
+failed to infer structural recursion:
+Not considering parameter α of Automatic.emptyset:
+  it is unchanged in the recursive calls
+no parameters suitable for structural recursion
+
+well-founded recursion cannot be used, 'Automatic.emptyset' does not take any (non-fixed) arguments
+```
+
+Getting around this issue requires the use of `unsafe`:
+
+```
+-- ∅ : Lang ◇.∅
+unsafe -- failed to infer structural recursion
+def emptyset {α: Type u}: Lang (@Language.emptyset.{u} α) := Lang.mk
+  -- ν ∅ = ⊥‽
+  (null := Decidability.empty)
+  -- δ ∅ a = ∅
+  (derive := fun _ => emptyset)
+```
 
 This was probably inevitable, given that the Agda version of Lang in [Automatic.lagda](https://github.com/conal/paper-2021-language-derivatives/blob/main/Automatic.lagda#L40-L44) required coinduction, which is not a feature of Lean:
 
@@ -123,7 +156,7 @@ record Lang (P : ◇.Lang) : Set (suc ℓ) where
     δ : (a : A) → Lang (◇.δ P a)
 ```
 
-Also this representation encountered issues with Agda's termination checker, when defining the derivative of the concat operator, which was fixed using a sized version of the record:
+Also this representation encountered issues with Agda's termination checker, but only when defining the derivative of the concat operator, not all operators as in Lean, which was fixed using a sized version of the record:
 
 ```agda
 record Lang i (P : ◇.Lang) : Set (suc ℓ) where
