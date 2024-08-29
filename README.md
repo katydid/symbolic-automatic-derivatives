@@ -40,6 +40,12 @@ We needed to redefine the following types and functions to use `Type` instead of
 | equivalance  | `Mathlib.Logic.Equiv.Defs.Equiv`  | `TEquiv` or `<=>` in [Function.lean](./Sadol/Function.lean) |
 | decidability | `Decidable`  | `Decidability.Dec` in [Decidability.lean](./Sadol/Decidability.lean) |
 
+When write proofs, we cannot rewrite using the `rw` tactic, but we need to destruct equalities, to do rewrites for us:
+```
+cases H with
+| refl =>
+```
+
 ### Simply renamings
 
 Some things we renamed since they are simply called different things in Agda and Lean, while others were renamed to be closer to the Lean convention.
