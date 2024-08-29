@@ -112,14 +112,14 @@ Agda seems to be better at using type inference to infer bottom, while Lean typi
 
 For example, proving the derivative of the empty string is the empty set, requires proving a few cases of bottom (`⊥` in Agda and `PEmpty` in Lean). In Agda these proofs are completed with type inference:
 
-```
+```agda
 δ𝟏  : δ 𝟏 a ⟷ ∅
 δ𝟏 = mk↔′ (λ ()) (λ ()) (λ ()) (λ ())
 ```
 
 In Lean we need to use the `contradiction` tactic or the proof becomes very long.
 
-```
+```lean
 def derive_emptystr {α: Type u} {a: α} {w: List α}:
   (derive emptystr a) w <=> emptyset w := by
   apply TEquiv.mk <;> (intro x; cases x) <;> contradiction
@@ -143,7 +143,7 @@ inductive Lang {α: Type u} : Language.Lang α -> Type (u+1) where
 But this results in a lot of termination checking issues, when instantiating operators in [Automatic.lean](./Sodal/Automatic.lean).
 
 For example, when we instantiate `emptyset`:
-```
+```lean
 -- ∅ : Lang ◇.∅
 def emptyset {α: Type u}: Lang (@Language.emptyset.{u} α) := Lang.mk
   -- ν ∅ = ⊥‽
@@ -168,7 +168,7 @@ well-founded recursion cannot be used, 'Automatic.emptyset' does not take any (n
 This seems to be a fundamental issue in regards to how inductive types work.
 We can get around this issue by using `unsafe`:
 
-```
+```lean
 -- ∅ : Lang ◇.∅
 unsafe -- failed to infer structural recursion
 def emptyset {α: Type u}: Lang (@Language.emptyset.{u} α) := Lang.mk
