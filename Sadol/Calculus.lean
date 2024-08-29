@@ -101,20 +101,12 @@ def null_universal {α: Type u}:
 --   (λ { tt → refl })
 --   (λ { refl → refl })
 def null_emptystr {α: Type u}:
-  @null α _ emptystr <=> PUnit := by
-  refine TEquiv.mk ?toFun ?invFun ?leftInv ?rightInv
-  · intro _
-    exact PUnit.unit
-  · intro _
-    constructor
-    rfl
-  · intro c
-    simp
-    constructor
-    constructor
-  · intro _
-    constructor
-    simp
+  @null α _ emptystr <=> PUnit :=
+  TEquiv.mk
+    (fun _ => PUnit.unit)
+    (fun _ => trfl)
+    (fun _ => trfl)
+    (fun _ => trfl)
 
 -- ν`  : ν (` c) ↔ ⊥
 -- ν` = mk↔′ (λ ()) (λ ()) (λ ()) (λ ())
@@ -208,13 +200,13 @@ def null_star {α: Type u} {P: Lang α}:
         simp
         constructor
   case invFun =>
-    -- TODO
+    -- TODO: The proof is complicated enough in Agda to warrant the liberal use of tactics in Lean
     sorry
   case leftInv =>
-    -- TODO
+    -- TODO: The proof is complicated enough in Agda to warrant the liberal use of tactics in Lean
     sorry
   case rightInv =>
-    -- TODO
+    -- TODO: The proof is complicated enough in Agda to warrant the liberal use of tactics in Lean
     sorry
 
 -- δ∅  : δ ∅ a ≡ ∅
@@ -256,10 +248,10 @@ def derive_char {α: Type u} {a: α} {c: α} {w: List α}:
     rw [S1]; rw [S2]
     exact trfl
   case leftInv =>
-    -- TODO
+    -- TODO: The proof in Agda is simple, so try to use as little tactics as possible
     sorry
   case rightInv =>
-    -- TODO
+    -- TODO: The proof in Agda is simple, so try to use as little tactics as possible
     sorry
 
 -- δ∪  : δ (P ∪ Q) a ≡ δ P a ∪ δ Q a
@@ -294,16 +286,16 @@ def derive_concat {α: Type u} {a: α} {P Q: Lang α} {w: List α}:
   (derive (concat P Q) a) w <=> (scalar (null P) (or (derive Q a) (concat (derive P a) Q))) w := by
   refine TEquiv.mk ?toFun ?invFun ?leftInv ?rightInv
   case toFun =>
-    -- TODO
+    -- TODO: The proof is complicated enough in Agda to warrant the liberal use of tactics in Lean
     sorry
   case invFun =>
-    -- TODO
+    -- TODO: The proof is complicated enough in Agda to warrant the liberal use of tactics in Lean
     sorry
   case leftInv =>
-    -- TODO
+    -- TODO: The proof is complicated enough in Agda to warrant the liberal use of tactics in Lean
     sorry
   case rightInv =>
-    -- TODO
+    -- TODO: The proof is complicated enough in Agda to warrant the liberal use of tactics in Lean
     sorry
 
 -- δ✪  : δ (P ✪) a ⟷ (ν P) ✶ · (δ P a ⋆ P ✪)
@@ -342,16 +334,16 @@ def derive_star {α: Type u} {a: α} {P: Lang α} {w: List α}:
   (derive (star P) a) w <=> (scalar (List (null P)) (concat (derive P a) (star P))) w := by
   refine TEquiv.mk ?toFun ?invFun ?leftInv ?rightInv
   case toFun =>
-    -- TODO
+    -- TODO: The proof is complicated enough in Agda to warrant the liberal use of tactics in Lean
     sorry
   case invFun =>
-    -- TODO
+    -- TODO: The proof is complicated enough in Agda to warrant the liberal use of tactics in Lean
     sorry
   case leftInv =>
-    -- TODO
+    -- TODO: The proof is complicated enough in Agda to warrant the liberal use of tactics in Lean
     sorry
   case rightInv =>
-    -- TODO
+    -- TODO: The proof is complicated enough in Agda to warrant the liberal use of tactics in Lean
     sorry
 
 -- 𝒟′ : (A ✶ → B) → A ✶ → B × (A ✶ → B)
