@@ -194,8 +194,19 @@ def null_star {α: Type u} {P: Lang α}:
   null (star P) <=> List (null P) := by
   refine TEquiv.mk ?toFun ?invFun ?leftInv ?rightInv
   case toFun =>
-    -- TODO
-    sorry
+    intro ⟨ N1, N2, N3 ⟩
+    cases N2 with
+    | nil =>
+      simp
+      constructor
+    | cons px pxs =>
+      rename_i xs
+      rename_i x
+      simp at N3
+      cases N3 with
+      | intro left right =>
+        simp
+        constructor
   case invFun =>
     -- TODO
     sorry
@@ -234,11 +245,16 @@ def derive_char {α: Type u} {a: α} {c: α} {w: List α}:
   (derive (char c) a) w <=> (scalar (a ≡ c) emptystr) w := by
   refine TEquiv.mk ?toFun ?invFun ?leftInv ?rightInv
   case toFun =>
-    -- TODO
-    sorry
+    intro ⟨ D ⟩
+    -- D: [a] ++ w = [c]
+    simp at D
+    -- D: a = c ∧ w = []
+    exact ⟨ TEq.mk D.left, TEq.mk D.right ⟩
   case invFun =>
-    -- TODO
-    sorry
+    intro ⟨ ⟨ S1 ⟩ , ⟨ S2 ⟩  ⟩
+    -- S1: a = c, S2: w = [], Goal: derive (char c) a w
+    rw [S1]; rw [S2]
+    exact trfl
   case leftInv =>
     -- TODO
     sorry
