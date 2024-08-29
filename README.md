@@ -202,6 +202,8 @@ We hope to find help to remove the use of `unsafe` in Lean or that it is possibl
 
 Apparently there are libraries in Lean that support coinduction, but none that support indexed coinductive types, which is what we require in this case.
 
+Also note, [sized types in Agda are fundamentally flawed](https://github.com/agda/agda/issues/2820), so whether Agda can represent Automatic.Lang without fault, is also an open question.
+
 ## Thank you
 
 Thank you to the [Conal Elliot](http://conal.net/) for the idea of comparing LeanProver to Agda using the paper [Symbolic and Automatic Differentiation of Languages - Conal Elliott](http://conal.net/papers/language-derivatives). If you are interested in collaborating with Conal Elliott, see this [Collaboration](https://github.com/conal/Collaboration) page.
