@@ -142,17 +142,19 @@ def null_concat {α: Type u} {P Q: Lang α}:
   null (concat P Q) <=> (Prod (null P) (null Q)) := by
   refine TEquiv.mk ?toFun ?invFun ?leftInv ?rightInv
   case toFun =>
-    -- TODO
-    sorry
+    intro ⟨x, y, hx, hy, hxy⟩
+    simp at hxy
+    simp [hxy] at hx hy
+    exact ⟨hx, hy⟩
   case invFun =>
-    -- TODO
-    sorry
+    intro ⟨x, y⟩
+    exact ⟨[], [], x, y, by simp⟩
   case leftInv =>
     -- TODO
     sorry
   case rightInv =>
-    -- TODO
-    sorry
+    intro
+    exact trfl
 
 -- ν✪  : ν (P ✪) ↔ (ν P) ✶
 -- ν✪ {P = P} = mk↔′ k k⁻¹ invˡ invʳ
