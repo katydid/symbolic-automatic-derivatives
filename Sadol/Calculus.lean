@@ -227,21 +227,31 @@ def derive_char {α: Type u} {a: α} {c: α} {w: List α}:
   refine TEquiv.mk ?toFun ?invFun ?leftInv ?rightInv
   case toFun =>
     intro ⟨ D ⟩
-    -- D: [a] ++ w = [c]
-    simp at D
-    -- D: a = c ∧ w = []
-    exact ⟨ TEq.mk D.left, TEq.mk D.right ⟩
+    cases D with
+    | refl =>
+      exact ⟨ trfl, trfl ⟩
   case invFun =>
     intro ⟨ ⟨ S1 ⟩ , ⟨ S2 ⟩  ⟩
-    -- S1: a = c, S2: w = [], Goal: derive (char c) a w
-    rw [S1]; rw [S2]
-    exact trfl
+    cases S1 with
+    | refl =>
+      cases S2 with
+      | refl =>
+        exact trfl
   case leftInv =>
-    -- TODO: The proof in Agda is simple, so try to use as little tactics as possible
-    sorry
+    simp
+    intro ⟨ H ⟩
+    cases H with
+    | refl =>
+      exact trfl
   case rightInv =>
-    -- TODO: The proof in Agda is simple, so try to use as little tactics as possible
-    sorry
+    simp
+    intro ⟨ ⟨ H1 ⟩, ⟨ H2 ⟩ ⟩
+    simp
+    cases H1 with
+    | refl =>
+      cases H2 with
+      | refl =>
+        exact trfl
 
 -- δ∪  : δ (P ∪ Q) a ≡ δ P a ∪ δ Q a
 -- δ∪ = refl
