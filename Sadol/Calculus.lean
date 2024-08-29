@@ -222,24 +222,7 @@ def derive_universal {α: Type u} {a: α}:
 -- δ𝟏 = mk↔′ (λ ()) (λ ()) (λ ()) (λ ())
 def derive_emptystr {α: Type u} {a: α} {w: List α}:
   (derive emptystr a) w <=> emptyset w := by
-  refine TEquiv.mk ?toFun ?invFun ?leftInv ?rightInv
-  case toFun =>
-    intro D
-    cases D
-    next D =>
-    contradiction
-  case invFun =>
-    intro E
-    contradiction
-  case leftInv =>
-    intro D
-    simp at D
-    cases D
-    next D =>
-    contradiction
-  case rightInv =>
-    intro E
-    contradiction
+  apply TEquiv.mk <;> (intro x; cases x) <;> contradiction
 
 -- δ`  : δ (` c) a ⟷ (a ≡ c) · 𝟏
 -- δ` = mk↔′
