@@ -127,10 +127,9 @@ def derive_emptystr {α: Type u} {a: α} {w: List α}:
 
 For non Lean users: `<;>` is similar to the Monad bind operator (`>>=`) over proof goals. It takes a list of goals to prove and applies the following tactics to each of the goals, which each produce another list of goals, which are all joined together into one list.
 
-## Termination Checking
+## Coinduction / Termination Checking
 
-[Automatic.lean](./Sodal/Automatic.lean) has a lot of termination checking issues.
-We can safely define Automatic.Lang:
+Lean does not have coinduction, which seems to be required for defining `Automatic.Lang`. We attempt an inductive defintion:
 
 ```lean
 inductive Lang {α: Type u} : Language.Lang α -> Type (u+1) where
@@ -140,7 +139,10 @@ inductive Lang {α: Type u} : Language.Lang α -> Type (u+1) where
     : Lang R
 ```
 
-But when we try to instantiate it using any operator, we get termination checking issues, for example given `emptyset`:
+
+But this results in a lot of termination checking issues, when instantiating operators in [Automatic.lean](./Sodal/Automatic.lean).
+
+For example, when we instantiate `emptyset`:
 ```
 -- ∅ : Lang ◇.∅
 def emptyset {α: Type u}: Lang (@Language.emptyset.{u} α) := Lang.mk
@@ -163,7 +165,8 @@ no parameters suitable for structural recursion
 well-founded recursion cannot be used, 'Automatic.emptyset' does not take any (non-fixed) arguments
 ```
 
-Getting around this issue requires the use of `unsafe`:
+This seems to be a fundamental issue in regards to how inductive types work.
+We can get around this issue by using `unsafe`:
 
 ```
 -- ∅ : Lang ◇.∅
@@ -175,7 +178,7 @@ def emptyset {α: Type u}: Lang (@Language.emptyset.{u} α) := Lang.mk
   (derive := fun _ => emptyset)
 ```
 
-This was probably inevitable, given that the Agda version of Lang in [Automatic.lagda](https://github.com/conal/paper-2021-language-derivatives/blob/main/Automatic.lagda#L40-L44) required coinduction, which is not a feature of Lean:
+This issue was probably inevitable, given that the Agda version of Lang in [Automatic.lagda](https://github.com/conal/paper-2021-language-derivatives/blob/main/Automatic.lagda#L40-L44) required coinduction, which is not a feature of Lean:
 
 ```agda
 record Lang (P : ◇.Lang) : Set (suc ℓ) where
@@ -185,7 +188,7 @@ record Lang (P : ◇.Lang) : Set (suc ℓ) where
     δ : (a : A) → Lang (◇.δ P a)
 ```
 
-Also this representation encountered issues with Agda's termination checker, but only when defining the derivative of the concat operator, not all operators as in Lean, which was fixed using a sized version of the record:
+Note, the Agda representation also encountered issues with Agda's termination checker, but only when defining the derivative of the concat operator, not all operators as in Lean. Also this was fixable in Agda using a sized version of the record:
 
 ```agda
 record Lang i (P : ◇.Lang) : Set (suc ℓ) where
@@ -195,7 +198,9 @@ record Lang i (P : ◇.Lang) : Set (suc ℓ) where
     δ : ∀ {j : Size< i} → (a : A) → Lang j (◇.δ P a)
 ```
 
-We hope to find help to remove the use of `unsafe` in Lean.
+We hope to find help to remove the use of `unsafe` in Lean or that it is possible to fix using a future `coinductive` feature.
+
+Apparently there are libraries in Lean that support coinduction, but none that support indexed coinductive types, which is what we require in this case.
 
 ## Thank you
 
