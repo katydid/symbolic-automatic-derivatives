@@ -146,15 +146,16 @@ def null_concat {α: Type u} {P Q: Lang α}:
     simp at hxy
     simp [hxy] at hx hy
     exact ⟨hx, hy⟩
-  case invFun => exact fun ⟨x, y⟩ => ⟨[], [], x, y, rfl⟩
+  case invFun =>
+    exact fun ⟨x, y⟩ => ⟨[], [], x, y, rfl⟩
   case leftInv =>
     intro ⟨x, y, hx, hy, hxy⟩
     simp at hxy
-    cases hxy.left with
-    | refl =>
-      cases hxy.right with
-        | refl => exact trfl
-  case rightInv => exact fun _ => trfl
+    cases hxy.left with | refl =>
+    cases hxy.right with | refl =>
+    exact trfl
+  case rightInv =>
+    exact fun _ => trfl
 
 -- ν✪  : ν (P ✪) ↔ (ν P) ✶
 -- ν✪ {P = P} = mk↔′ k k⁻¹ invˡ invʳ
@@ -232,9 +233,9 @@ def derive_char {α: Type u} {a: α} {c: α} {w: List α}:
     cases D with | refl =>
     exact ⟨ trfl, trfl ⟩
   case invFun =>
-    intro ⟨ ⟨ S1 ⟩ , ⟨ S2 ⟩  ⟩
-    cases S1 with | refl =>
-    cases S2 with | refl =>
+    intro ⟨ ⟨ H1 ⟩ , ⟨ H2 ⟩  ⟩
+    cases H1 with | refl =>
+    cases H2 with | refl =>
     exact trfl
   case leftInv =>
     intro ⟨ H ⟩
