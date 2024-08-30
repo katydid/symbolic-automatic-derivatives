@@ -4,18 +4,13 @@
 
 import Sadol.Tipe
 
-namespace Language
-
 -- module Language {ℓ} (A : Set ℓ) where
-universe u
+namespace Language
 
 -- Lang : Set (suc ℓ)
 -- Lang = A ✶ → Set ℓ
 def Lang (α : Type u) : Type (u + 1) :=
   List α -> Type u
-
--- variable α should be implicit to make sure examples do not need to also provide the parameter of α when constructing char, or, concat, since it usually can be inferred to be Char.
-variable {α : Type u}
 
 -- ∅ : Lang
 -- ∅ w = ⊥
@@ -26,43 +21,43 @@ def emptyset : Lang α :=
 
 -- 𝒰 : Lang
 -- 𝒰 w = ⊤
-def universal : Lang α :=
+def universal {α: Type u} : Lang α :=
   -- PUnit is Empty, but allows specifying the universe
   -- PUnit is a Sort, which works for both Prop and Type
   fun _ => PUnit
 
 -- 𝟏 : Lang
 -- 𝟏 w = w ≡ []
-def emptystr : Lang α :=
+def emptystr {α: Type u} : Lang α :=
   fun w => w ≡ []
 
 -- ` : A → Lang
 -- ` c w = w ≡ [ c ]
-def char (a : α): Lang α :=
+def char {α: Type u} (a : α): Lang α :=
   fun w => w ≡ [a]
 
 -- infixl 7 _·_
 -- _·_ : Set ℓ → Op₁ Lang
 -- (s · P) w = s × P w
-def scalar (s : Type u) (P : Lang α) : Lang α :=
+def scalar {α: Type u} (s : Type u) (P : Lang α) : Lang α :=
   fun w => s × P w
 
 -- infixr 6 _∪_
 -- _∪_ : Op₂ Lang
 -- (P ∪ Q) w = P w ⊎ Q w
-def or (P : Lang α) (Q : Lang α) : Lang α :=
+def or {α: Type u} (P : Lang α) (Q : Lang α) : Lang α :=
   fun w => P w ⊕ Q w
 
 -- infixr 6 _∩_
 -- _∩_ : Op₂ Lang
 -- (P ∩ Q) w = P w × Q w
-def and (P : Lang α) (Q : Lang α) : Lang α :=
+def and {α: Type u} (P : Lang α) (Q : Lang α) : Lang α :=
   fun w => P w × Q w
 
 -- infixl 7 _⋆_
 -- _⋆_ : Op₂ Lang
 -- (P ⋆ Q) w = ∃⇃ λ (u ,  v) → (w ≡ u ⊙ v) × P u × Q v
-def concat (P : Lang α) (Q : Lang α) : Lang α :=
+def concat {α: Type u} (P : Lang α) (Q : Lang α) : Lang α :=
   fun (w : List α) =>
     Σ' (x : List α) (y : List α), (_px: P x) ×' (_qy: Q y) ×' w = (x ++ y)
 
@@ -73,7 +68,7 @@ inductive All {α: Type u} (P : α -> Type u) : (List α -> Type u) where
 -- infixl 10 _☆
 -- _☆ : Op₁ Lang
 -- (P ☆) w = ∃ λ ws → (w ≡ concat ws) × All P ws
-def star (P : Lang α) : Lang α :=
+def star {α: Type u} (P : Lang α) : Lang α :=
   fun (w : List α) =>
     Σ' (ws : List (List α)), (_pws: All P ws) ×' w = (List.join ws)
 

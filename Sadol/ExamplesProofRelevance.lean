@@ -16,17 +16,41 @@ def example_of_proof_relevant_parse_left_or_right : parse_aora_with_string_a -> 
   intro x
   cases x with
   | inl xa =>
-    cases xa with
-    | mk eq =>
-      cases eq with
-      | refl =>
-        exact "left"
+    cases xa with | mk eq =>
+    cases eq with | refl =>
+    exact "left"
   | inr xb =>
-    cases xb with
-    | mk eq =>
-    cases eq with
-      | refl =>
-        exact "right"
+    cases xb with | mk eq =>
+    cases eq with | refl =>
+    exact "right"
+
+example : (or (char 'a') (char 'a')) (['a']) -> String :=
+  fun parse => match parse with
+  | Sum.inl _ => "left"
+  | Sum.inr _ => "right"
+
+example : (or (or (char 'a') (char 'a')) (char 'b')) (['a']) -> String :=
+  fun parse => match parse with
+  | Sum.inl _ => "left"
+  | Sum.inr _ => "right"
+
+example : (or (or (char 'a') (char 'a')) (char 'b')) (['a']) -> String := by
+  intro r
+  cases r with
+  | inl as =>
+    cases as with
+    | inl a1 =>
+      cases a1 with | mk a1 =>
+      cases a1 with | refl =>
+      exact "left"
+    | inr a2 =>
+      cases a2 with | mk a2 =>
+      cases a2 with | refl =>
+      exact "right"
+  | inr b =>
+    cases b with | mk b =>
+    cases b
+    -- no parse possible
 
 -- This is just a lame example to show that less obvious languages can still be parsed and proofs inspected.
 def example_of_proof_relevant_parse1 : (or (char 'a') (char 'b')) (toList "a") -> Nat := by
