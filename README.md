@@ -112,27 +112,6 @@ Also each function signature and its implementatio is grouped together in Lean, 
 
 ## Non-Trivial differences from the Agda implementation
 
-## Proofs of Contradiction
-
-Agda seems to be better at using type inference to infer bottom, while Lean typically prefers the use of a tactic.
-
-For example, proving the derivative of the empty string is the empty set, requires proving a few cases of bottom (`⊥` in Agda and `PEmpty` in Lean). In Agda these proofs are completed with type inference:
-
-```agda
-δ𝟏  : δ 𝟏 a ⟷ ∅
-δ𝟏 = mk↔′ (λ ()) (λ ()) (λ ()) (λ ())
-```
-
-In Lean we need to use the `contradiction` tactic or the proof becomes very long.
-
-```lean
-def derive_emptystr {α: Type u} {a: α} {w: List α}:
-  (derive emptystr a) w <=> emptyset w := by
-  apply TEquiv.mk <;> (intro x; cases x) <;> contradiction
-```
-
-For non Lean users: `<;>` is similar to the Monad bind operator (`>>=`) over proof goals. It takes a list of goals to prove and applies the following tactics to each of the goals, which each produce another list of goals, which are all joined together into one list.
-
 ## Coinduction / Termination Checking
 
 Lean does not have coinduction, which seems to be required for defining `Automatic.Lang`. We attempt an inductive defintion:

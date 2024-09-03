@@ -111,8 +111,8 @@ def null_emptystr {α: Type u}:
 -- ν`  : ν (` c) ↔ ⊥
 -- ν` = mk↔′ (λ ()) (λ ()) (λ ()) (λ ())
 def null_char {α: Type u} {c: α}:
-  null (char c) <=> PEmpty := by
-  constructor <;> (intro x; cases x) <;> contradiction
+  null (char c) <=> PEmpty :=
+  TEquiv.mk nofun nofun nofun nofun
 
 -- ν∪  : ν (P ∪ Q) ≡ (ν P ⊎ ν Q)
 -- ν∪ = refl
@@ -216,8 +216,8 @@ def derive_universal {α: Type u} {a: α}:
 -- δ𝟏  : δ 𝟏 a ⟷ ∅
 -- δ𝟏 = mk↔′ (λ ()) (λ ()) (λ ()) (λ ())
 def derive_emptystr {α: Type u} {a: α} {w: List α}:
-  (derive emptystr a) w <=> emptyset w := by
-  apply TEquiv.mk <;> (intro x; cases x) <;> contradiction
+  (derive emptystr a) w <=> emptyset w :=
+  TEquiv.mk nofun nofun nofun nofun
 
 -- δ`  : δ (` c) a ⟷ (a ≡ c) · 𝟏
 -- δ` = mk↔′
