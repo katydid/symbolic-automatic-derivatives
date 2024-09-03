@@ -341,12 +341,17 @@ def derive_star {α: Type u} {a: α} {P: Lang α} {w: List α}:
 
 -- 𝒟′ : (A ✶ → B) → A ✶ → B × (A ✶ → B)
 -- 𝒟′ f u = f u , 𝒟 f u
-def derives' {α: Type u} {β: Type v} (f: List α -> β) (u: List α): (β × (List α -> β)) :=
+def auto_derives {α: Type u} {β: Type v} (f: List α -> β) (u: List α): (β × (List α -> β)) :=
   (f u, derives f u)
+
+def auto_derive {α: Type u} {β: Type v}
+  (f: List α -> β) (a: α): (β × (List α -> β)) :=
+  let g := derive f a
+  (null g, g)
 
 -- ʻ𝒟 : (A ✶ → B) → A ✶ → B × (A ✶ → B)
 -- ʻ𝒟 f u = let f″ = foldl δ f u in ν f″ , f″
-def derives'' {α: Type u} {β: Type v} (f: List α -> β) (u: List α): (β × (List α -> β)) :=
+def auto_derives' {α: Type u} {β: Type v} (f: List α -> β) (u: List α): (β × (List α -> β)) :=
   let f' := foldl derive f u
   (null f', f')
 
@@ -354,8 +359,8 @@ def derives'' {α: Type u} {β: Type v} (f: List α -> β) (u: List α): (β × 
 -- 𝒟′≡ʻ𝒟     []     = refl
 -- 𝒟′≡ʻ𝒟 (a  ∷ as)  = 𝒟′≡ʻ𝒟 as
 -- The paper says: "For functions f and g, f ≗ g is extensional equality, i.e., ∀ x → f x ≡ g x."
-def derives'_is_derives'' {α: Type u} {β: Type v} (f: List α -> β):
-  (w: List α) -> (derives' f w) ≡ (derives'' f w) :=
+def auto_derives_is_auto_derives' {α: Type u} {β: Type v} (f: List α -> β):
+  (w: List α) -> (auto_derives f w) ≡ (auto_derives' f w) :=
   fun w =>
   match w with
   | [] => trfl

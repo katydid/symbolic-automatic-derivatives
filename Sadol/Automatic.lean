@@ -23,23 +23,23 @@ namespace Automatic
 --     ν : Dec (◇.ν P)
 --     δ : (a : A) → Lang (◇.δ P a)
 
-inductive Lang {α: Type u} : Language.Lang α -> Type (u+1) where
+inductive Auto {α: Type u} : Language.Lang α -> Type (u+1) where
   | mk
     (null: Decidability.Dec (Calculus.null R))
-    (derive: (a: α) -> Lang (Calculus.derive R a))
-    : Lang R
+    (derive: (a: α) -> Auto (Calculus.derive R a))
+    : Auto R
 
-def null (l: Lang R): Decidability.Dec (Calculus.null R) :=
+def null (l: Auto R): Decidability.Dec (Calculus.null R) :=
   match l with
-  | Lang.mk n _ => n
+  | Auto.mk n _ => n
 
-def derive {α: Type u} {R: Language.Lang α} (l: Lang R) (a: α): Lang (Calculus.derive R a) :=
+def derive {α: Type u} {R: Language.Lang α} (l: Auto R) (a: α): Auto (Calculus.derive R a) :=
   match l with
-  | Lang.mk _ d => d a
+  | Auto.mk _ d => d a
 
 -- ∅ : Lang ◇.∅
 unsafe -- failed to infer structural recursion
-def emptyset {α: Type u}: Lang (@Language.emptyset.{u} α) := Lang.mk
+def emptyset {α: Type u}: Auto (@Language.emptyset.{u} α) := Auto.mk
   -- ν ∅ = ⊥‽
   (null := Decidability.empty)
   -- δ ∅ a = ∅
@@ -47,7 +47,7 @@ def emptyset {α: Type u}: Lang (@Language.emptyset.{u} α) := Lang.mk
 
 -- 𝒰    : Lang  ◇.𝒰
 unsafe -- failed to infer structural recursion
-def universal {α: Type u}: Lang (@Language.universal.{u} α) := Lang.mk
+def universal {α: Type u}: Auto (@Language.universal.{u} α) := Auto.mk
   -- ν 𝒰 = ⊤‽
   (null := Decidability.unit)
   -- δ 𝒰 a = 𝒰
@@ -56,7 +56,7 @@ def universal {α: Type u}: Lang (@Language.universal.{u} α) := Lang.mk
 
 -- _∪_  : Lang  P  → Lang Q  → Lang (P  ◇.∪  Q)
 unsafe -- fail to show termination for Automatic.or
-def or {α: Type u} {P Q: Language.Lang α} (p: Lang P) (q: Lang Q): Lang (Language.or P Q) := Lang.mk
+def or {α: Type u} {P Q: Language.Lang α} (p: Auto P) (q: Auto Q): Auto (Language.or P Q) := Auto.mk
   -- ν (p ∪ q) = ν p ⊎‽ ν q
   (null := Decidability.sum (null p) (null q))
   -- δ (p ∪ q) a = δ p a ∪ δ q a
@@ -64,7 +64,7 @@ def or {α: Type u} {P Q: Language.Lang α} (p: Lang P) (q: Lang Q): Lang (Langu
 
 -- _∩_  : Lang  P  → Lang Q  → Lang (P  ◇.∩  Q)
 unsafe -- fail to show termination for Automatic.and
-def and {α: Type u} {P Q: Language.Lang α} (p: Lang P) (q: Lang Q): Lang (Language.and P Q) := Lang.mk
+def and {α: Type u} {P Q: Language.Lang α} (p: Auto P) (q: Auto Q): Auto (Language.and P Q) := Auto.mk
   -- ν (p ∩ q) = ν p ×‽ ν q
   (null := Decidability.prod (null p) (null q))
   -- δ (p ∩ q) a = δ p a ∩ δ q a
@@ -72,7 +72,7 @@ def and {α: Type u} {P Q: Language.Lang α} (p: Lang P) (q: Lang Q): Lang (Lang
 
 -- _·_  : Dec   s  → Lang P  → Lang (s  ◇.·  P)
 unsafe -- fail to show termination for Automatic.scalar
-def scalar {α: Type u} {P: Language.Lang α} (s: Decidability.Dec S) (p: Lang P): Lang (Language.scalar S P) := Lang.mk
+def scalar {α: Type u} {P: Language.Lang α} (s: Decidability.Dec S) (p: Auto P): Auto (Language.scalar S P) := Auto.mk
   -- ν (s · p) = s ×‽ ν p
   (null := Decidability.prod s (null p))
   -- δ (s · p) a = s · δ p a
@@ -80,7 +80,7 @@ def scalar {α: Type u} {P: Language.Lang α} (s: Decidability.Dec S) (p: Lang P
 
 -- _◂_  : (Q ⟷ P) → Lang P → Lang Q
 unsafe -- fail to show termination for Automatic.iso
-def iso {α: Type u} {P Q: Language.Lang α} (f: ∀ {w: List α}, Q w <=> P w) (p: Lang P): Lang Q := Lang.mk
+def iso {α: Type u} {P Q: Language.Lang α} (f: ∀ {w: List α}, Q w <=> P w) (p: Auto P): Auto Q := Auto.mk
   -- ν (f ◂ p) = f ◃ ν p
   (null := Decidability.apply' f (null p))
   -- δ (f ◂ p) a = f ◂ δ p a
@@ -88,7 +88,7 @@ def iso {α: Type u} {P Q: Language.Lang α} (f: ∀ {w: List α}, Q w <=> P w) 
 
 -- 𝟏    : Lang ◇.𝟏
 unsafe -- dependent on iso which uses unsafe
-def emptystr {α: Type u}: Lang (@Language.emptystr α) := Lang.mk
+def emptystr {α: Type u}: Auto (@Language.emptystr α) := Auto.mk
   -- ν 𝟏 = ν𝟏 ◃ ⊤‽
   (null := Decidability.apply' Calculus.null_emptystr Decidability.unit)
   -- δ 𝟏 a = δ𝟏 ◂ ∅
@@ -96,7 +96,7 @@ def emptystr {α: Type u}: Lang (@Language.emptystr α) := Lang.mk
 
 -- _⋆_  : Lang  P  → Lang Q  → Lang (P  ◇.⋆  Q)
 unsafe -- fail to show termination for Automatic.concat
-def concat {α: Type u} {P Q: Language.Lang α} (p: Lang P) (q: Lang Q): Lang (Language.concat P Q) := Lang.mk
+def concat {α: Type u} {P Q: Language.Lang α} (p: Auto P) (q: Auto Q): Auto (Language.concat P Q) := Auto.mk
   -- ν (p ⋆ q) = ν⋆ ◃ (ν p ×‽ ν q)
   (null := Decidability.apply' Calculus.null_concat (Decidability.prod (null p) (null q)))
   -- δ (p ⋆ q) a = δ⋆ ◂ (ν p · δ q a ∪ δ p a ⋆ q)
@@ -113,7 +113,7 @@ def concat {α: Type u} {P Q: Language.Lang α} (p: Lang P) (q: Lang Q): Lang (L
 
 -- _☆   : Lang  P → Lang (P ◇.☆)
 unsafe -- fail to show termination for Automatic.star
-def star {α: Type u} {P: Language.Lang α} (p: Lang P): Lang (Language.star P) := Lang.mk
+def star {α: Type u} {P: Language.Lang α} (p: Auto P): Auto (Language.star P) := Auto.mk
   -- ν (p ☆) = ν☆ ◃ (ν p ✶‽)
   (null := Decidability.apply' Calculus.null_star (Decidability.list (null p)))
   -- δ (p ☆) a = δ☆ ◂ (ν p ✶‽ · (δ p a ⋆ p ☆))
@@ -128,7 +128,7 @@ def star {α: Type u} {P: Language.Lang α} (p: Lang P): Lang (Language.star P) 
 
 -- `    : (a : A) → Lang (◇.` a)
 unsafe -- dependent on iso which uses unsafe
-def char {α: Type u} [Decidability.DecEq α] (c: α): Lang (Language.char c) := Lang.mk
+def char {α: Type u} [Decidability.DecEq α] (c: α): Auto (Language.char c) := Auto.mk
   -- ν (` a) = ν` ◃ ⊥‽
   (null := Decidability.apply' Calculus.null_char Decidability.empty)
   -- δ (` c) a = δ` ◂ ((a ≟ c) · 𝟏)
@@ -142,7 +142,7 @@ def char {α: Type u} [Decidability.DecEq α] (c: α): Lang (Language.char c) :=
 -- ⟦_⟧‽ : Lang P → Decidable P
 -- ⟦ p ⟧‽     []    = ν p
 -- ⟦ p ⟧‽ (a  ∷ w)  = ⟦ δ p a ⟧‽ w
-def decDenote (p: Lang P): Decidability.DecPred P :=
+def decDenote (p: Auto P): Decidability.DecPred P :=
   fun w =>
     match w with
     | [] => null p
@@ -150,6 +150,6 @@ def decDenote (p: Lang P): Decidability.DecPred P :=
 
 -- ⟦_⟧ : Lang P → ◇.Lang
 -- ⟦_⟧ {P} _ = P
-def denote (_: @Lang α P): Language.Lang α := P
+def denote (_: @Auto α P): Language.Lang α := P
 
 end Automatic

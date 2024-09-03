@@ -17,35 +17,49 @@ import Sadol.Calculus
 
 namespace Symbolic
 
--- data Lang : ◇.Lang → Set (suc ℓ) where
-inductive Lang: {α: Type u} -> Language.Lang.{u} α -> Type (u + 1) where
+def Lang.emptyset: Language.Lang.{u} α := Language.emptyset
+
+inductive Symb' {α: Type u} where
   -- ∅ : Lang ◇.∅
-  | emptyset : Lang Language.emptyset
+  | emptyset : Symb'
   -- 𝒰 : Lang ◇.𝒰
-  | universal : Lang Language.universal
+  | universal : Symb'
   -- 𝟏 : Lang ◇.𝟏
-  | emptystr : Lang Language.emptystr
+  | emptystr : Symb'
   -- ` : (a : A) → Lang (◇.` a)
-  | char: (a: α) -> Lang (Language.char a)
+  | char: (a: α) -> Symb'
   -- _∪_ : Lang P → Lang Q → Lang (P ◇.∪ Q)
-  | or : Lang P -> Lang Q -> Lang (Language.or P Q)
+  | or : Symb' -> Symb' -> Symb'
+
+-- data Lang : ◇.Lang → Set (suc ℓ) where
+inductive Symb: {α: Type u} -> Language.Lang.{u} α -> Type (u + 1) where
+  -- ∅ : Lang ◇.∅
+  | emptyset : Symb Lang.emptyset
+  -- 𝒰 : Lang ◇.𝒰
+  | universal : Symb Language.universal
+  -- 𝟏 : Lang ◇.𝟏
+  | emptystr : Symb Language.emptystr
+  -- ` : (a : A) → Lang (◇.` a)
+  | char: (a: α) -> Symb (Language.char a)
+  -- _∪_ : Lang P → Lang Q → Lang (P ◇.∪ Q)
+  | or : Symb P -> Symb Q -> Symb (Language.or P Q)
   -- _∩_ : Lang P → Lang Q → Lang (P ◇.∩ Q)
-  | and : Lang P -> Lang Q -> Lang (Language.and P Q)
+  | and : Symb P -> Symb Q -> Symb (Language.and P Q)
   -- _·_ : Dec s → Lang P → Lang (s ◇.· P)
-  | scalar {s: Type u}: (Decidability.Dec s) -> Lang P -> Lang (Language.scalar s P)
+  | scalar {s: Type u}: (Decidability.Dec s) -> Symb P -> Symb (Language.scalar s P)
   -- _⋆_ : Lang  P → Lang Q → Lang (P ◇.⋆ Q)
-  | concat : Lang P -> Lang Q -> Lang (Language.concat P Q)
+  | concat : Symb P -> Symb Q -> Symb (Language.concat P Q)
   -- _☆  : Lang P → Lang (P ◇.☆)
-  | star : Lang P -> Lang (Language.star P)
+  | star : Symb P -> Symb (Language.star P)
   -- _◂_  : (Q ⟷ P) → Lang P → Lang Q
   -- "The reason _◀_ must be part of the inductive representation is the same as the other constructors, namely so that the core lemmas (Figure 3) translate into an implementation in terms of that representation."
   -- This is also used in the definition derive as the result of various operators.
-  | iso {P Q: Language.Lang α}: (∀ {w: List α}, Q w <=> P w) -> Lang P -> Lang Q
+  | iso {P Q: Language.Lang α}: (∀ {w: List α}, Q w <=> P w) -> Symb P -> Symb Q
 
-export Lang (emptyset universal emptystr char or and scalar concat star iso)
+export Symb (emptyset universal emptystr char or and scalar concat star iso)
 
 -- ν  : Lang P → Dec (◇.ν P)
-def null (l: Lang R): Decidability.Dec (Calculus.null R) :=
+def null (l: Symb R): Decidability.Dec (Calculus.null R) :=
   match l with
   -- ν ∅ = ⊥‽
   | emptyset => Decidability.empty
@@ -69,7 +83,7 @@ def null (l: Lang R): Decidability.Dec (Calculus.null R) :=
   | iso f p => Decidability.apply' f (null p)
 
 -- δ  : Lang P → (a : A) → Lang (◇.δ P a)
-def derive [Decidability.DecEq α] (l: Lang P) (a: α): Lang (Calculus.derive P a) :=
+def Symb.derive [Decidability.DecEq α] (l: Symb P) (a: α): Symb (Calculus.derive P a) :=
   match l with
   -- δ ∅ a = ∅
   | emptyset => emptyset
@@ -113,14 +127,14 @@ def derive [Decidability.DecEq α] (l: Lang P) (a: α): Lang (Calculus.derive P 
 -- ⟦_⟧‽ : Lang P → Decidable P
 -- ⟦ p ⟧‽     []    = ν p
 -- ⟦ p ⟧‽ (a  ∷ w)  = ⟦ δ p a ⟧‽ w
-def decDenote [Decidability.DecEq α] (p: @Lang α P): Decidability.DecPred P :=
-  fun w =>
-    match w with
-    | [] => null p
-    | (a :: w) => decDenote (derive p a) w
+def Symb.denote [Decidability.DecEq α] {P: Language.Lang α} (p: Symb P):
+  ∀ (w: List α), Decidability.Dec (P w) :=
+  fun w => match w with
+  | [] => null p
+  | (a :: as) => Symb.denote (Symb.derive p a) as
 
 -- ⟦_⟧ : Lang P → ◇.Lang
 -- ⟦_⟧ {P} r = P
-def denote (_: @Lang α P): Language.Lang α := P
+def denote (_: @Symb α P): Language.Lang α := P
 
 end Symbolic

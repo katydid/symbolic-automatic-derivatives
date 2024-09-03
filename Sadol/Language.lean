@@ -46,7 +46,7 @@ def scalar {α: Type u} (s : Type u) (P : Lang α) : Lang α :=
 -- _∪_ : Op₂ Lang
 -- (P ∪ Q) w = P w ⊎ Q w
 def or {α: Type u} (P : Lang α) (Q : Lang α) : Lang α :=
-  fun w => P w ⊕ Q w
+  fun w => Sum (P w) (Q w)
 
 -- infixr 6 _∩_
 -- _∩_ : Op₂ Lang
