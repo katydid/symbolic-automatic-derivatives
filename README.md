@@ -226,10 +226,14 @@ Thank you to the Authors and Advisors:
 And thank you to everyone on [leanprover zulip chat](leanprover.zulipchat.com):
 
   * [Adam Topaz](https://github.com/adamtopaz)
+  * [Alex Keizer](mailto:alex@keizer.dev)
   * [Andrew Carter](mailto:acarter@cs.hmc.edu)
+  * [Andrés Goens](https://github.com/goens)
   * [Arthur Adjedj](https://github.com/arthur-adjedj)
+  * Daniel Weber
   * [Damiano Testa](https://github.com/adomani)
   * [David Thrane Christiansen](https://davidchristiansen.dk/)
+  * Edward van de Meent
   * [Eric Wieser](https://github.com/eric-wieser)
   * [Eric Rodriguez](https://github.com/ericrbg)
   * [François G. Dorais](https://github.com/fgdorais)
@@ -241,6 +245,7 @@ And thank you to everyone on [leanprover zulip chat](leanprover.zulipchat.com):
   * [Sebastian Ullrich](https://github.com/Kha)
   * [Shreyas Srinivas](mailto:s.s.shreyas@outlook.com)
   * [Siegmentation Fault](https://github.com/forked-from-1kasper)
+  * [Yuri de Wit](mailto:ydewit@gmail.com)
 
 Where I asked many questions about:
 
