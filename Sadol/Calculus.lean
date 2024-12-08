@@ -276,7 +276,7 @@ def derive_scalar {α: Type u} {a: α} {s: Type u} {P: Lang α}:
 --   (λ { (([] , .(a ∷ w)) , refl , νP , Qaw) → refl
 --      ; ((.a ∷ u , v) , refl , Pu , Qv) → refl })
 def derive_concat {α: Type u} {a: α} {P Q: Lang α} {w: List α}:
-  (derive (concat P Q) a) w <=> (scalar (null P) (or (derive Q a) (concat (derive P a) Q))) w := by
+  (derive (concat P Q) a) w <=> (or (scalar (null P) (derive Q a)) (concat (derive P a) Q)) w := by
   refine TEquiv.mk ?toFun ?invFun ?leftInv ?rightInv
   case toFun =>
     -- TODO: The proof is complicated enough in Agda to warrant the liberal use of tactics in Lean

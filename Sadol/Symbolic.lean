@@ -86,11 +86,9 @@ def derive [Decidability.DecEq α] (l: Lang P) (a: α): Lang (Calculus.derive P 
   -- δ (p ⋆ q) a = δ⋆ ◂ (ν p · δ q a ∪ δ p a ⋆ q)
   | concat p q =>
     (iso Calculus.derive_concat
-      (scalar (null p)
-        (or
-          (derive q a)
-          (concat (derive p a) q)
-        )
+      (or
+        (scalar (null p) (derive q a))
+        (concat (derive p a) q)
       )
     )
   -- δ (p ☆) a = δ☆ ◂ (ν p ✶‽ · (δ p a ⋆ p ☆))
