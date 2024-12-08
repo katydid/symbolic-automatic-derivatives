@@ -102,11 +102,9 @@ def concat {α: Type u} {P Q: Language.Lang α} (p: Lang P) (q: Lang Q): Lang (L
   -- δ (p ⋆ q) a = δ⋆ ◂ (ν p · δ q a ∪ δ p a ⋆ q)
   (derive := fun (a: α) =>
     (iso Calculus.derive_concat
-      (scalar (null p)
-        (or
-          (derive q a)
-          (concat (derive p a) q)
-        )
+      (or
+        (scalar (null p) (derive q a))
+        (concat (derive p a) q)
       )
     )
   )

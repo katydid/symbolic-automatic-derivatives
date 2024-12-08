@@ -70,7 +70,7 @@ inductive All {α: Type u} (P : α -> Type u) : (List α -> Type u) where
 -- (P ☆) w = ∃ λ ws → (w ≡ concat ws) × All P ws
 def star {α: Type u} (P : Lang α) : Lang α :=
   fun (w : List α) =>
-    Σ' (ws : List (List α)), (_pws: All P ws) ×' w = (List.join ws)
+    Σ' (ws : List (List α)), (_pws: All P ws) ×' w = (List.flatten ws)
 
 -- attribute [simp] allows these definitions to be unfolded when using the simp tactic.
 attribute [simp] universal emptyset emptystr char scalar or and concat star
