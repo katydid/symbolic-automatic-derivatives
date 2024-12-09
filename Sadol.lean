@@ -7,3 +7,4 @@ import Sadol.Examples
 import Sadol.ExamplesProofRelevance
 import Sadol.Symbolic
 import Sadol.Automatic
+import Sadol.SizedAutomatic
